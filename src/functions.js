@@ -1,4 +1,4 @@
-import {LONG, PLAYLISTS, SHORT, YOUTUBE_ID_LENGTH} from './constants';
+import {LOCAL_STORAGE, LONG, PLAYLISTS, SHORT, YOUTUBE_ID_LENGTH} from './constants';
 
 const isLong = (url) => {
     return (url.indexOf(LONG) !== -1);
@@ -7,6 +7,8 @@ const isLong = (url) => {
 const isShort = (url) => {
     return (url.indexOf(SHORT) !== -1);
 };
+
+const isYoutubeUrl = (url) => (isLong(url)) || isShort(url);
 
 const truncAdditionalParams = (url) => (url.split('&')[0]);
 
@@ -19,8 +21,8 @@ export const extractYoutubeId = (url) => {
     return result.length === YOUTUBE_ID_LENGTH ? result : '';
 };
 
-export const getPlaylists = () => (
-    PLAYLISTS.map((item, ind) => ({
+export const getPlaylists = (lists) => (
+    lists.map((item, ind) => ({
         key: ind,
         href: ind,
         text: item['title']
@@ -40,3 +42,31 @@ export const getTextForm = (sourceNumber, textForms) => {
     }
     return textForms[2];
 };
+
+const getClearStorageData = (data) => (
+    Array.isArray(data) ? data.filter(item => (item['title'] && item['href']
+        && isValidUrl(item['href']) && isYoutubeUrl(item['href']))) : []
+);
+
+export const getLocalPlaylists = () => {
+    const storageData = localStorage.getItem(LOCAL_STORAGE) ?
+        getClearStorageData(JSON.parse(localStorage.getItem(LOCAL_STORAGE))) : [];
+    return [...PLAYLISTS, ...storageData];
+};
+
+export const isValidUrl = (url) => {
+    const pattern = new RegExp('^(https:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + //port
+        '(\\?[;&amp;a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i');
+    return pattern.test(url);
+};
+
+export const getClearData = (data) => data.map(el => {
+    el['link'] = el['link'] ? extractYoutubeId(el['link']) : '';
+    return el;
+});
+
+export const isData = (data) => (data && Array.isArray(data) && data.length > 0);

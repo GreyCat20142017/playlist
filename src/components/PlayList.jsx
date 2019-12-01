@@ -1,28 +1,21 @@
-import React, {useState, useEffect} from 'react';
-import SimpleTable from './simpletable/SimpleTable';
+import React from 'react';
+
+import {Typography} from '@material-ui/core';
+
+import MUITable from './table/MUITable';
 import {getTextForm} from '../functions';
+import {ROWS_LIMIT} from '../constants';
 
-const PlayList = ({title, data, playerActive}) => {
-
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    useEffect(() => {
-        setIsCollapsed(playerActive);
-    }, [playerActive]);
-
-    const details = data.map((item, ind) => (ind + 1) + '. ' + item['title']);
-
-    return (
-        <>
-            <h3 className='h3-responsive mb-3'>{title} ({data.length} {getTextForm(data.length, ['трек', 'трека', 'треков'])})</h3>
-            {isCollapsed ?
-                <button className='btn btn-sm btn-mdb-color' title='развернуть список'
-                        onClick={() => setIsCollapsed(!isCollapsed)}>{title} ({data.length} треков) - развернуть
-                    список</button>
-                :
-                <SimpleTable details={details}/>
-            }
-        </>
-    );
-};
+const PlayList = ({title, data}) => (
+    <>
+        <div style={{paddingTop: '20px'}}>
+            <Typography style={{marginBottom: '10px'}} variant={'h6'}>
+                {title} ({data.length} {getTextForm(data.length, ['трек', 'трека', 'треков'])})
+            </Typography>
+            <MUITable data={data} columns={['id', 'title']} rowsLimit={ROWS_LIMIT} size={'small'}
+                      maxWidth={'300px'}/>
+        </div>
+    </>
+);
 
 export default PlayList;

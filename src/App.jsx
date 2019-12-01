@@ -1,37 +1,61 @@
 import React, {useState} from 'react';
+
+import {ThemeProvider} from '@material-ui/styles';
+import {Container, CssBaseline, Paper, Typography} from '@material-ui/core';
+
 import PlayListContainer from './components/PlayListContainer';
-import {PLAYLISTS} from './constants';
-import DropDown from './components/dropdown/DropDownHook';
-import {getPlaylists} from './functions';
+import Player from './components/player/Player';
+
+import {getLocalPlaylists} from './functions';
+import {theme} from './theme';
+import {useStyles} from './App.css.js';
+import Aside from './components/aside/Aside';
+import Header from './components/header/Header';
+import Footer from './components/footer/Footer';
+import Form from './components/form/Form';
 
 const App = () => {
+    const [lists, setLists] = useState(getLocalPlaylists());
     const [playlist, setPlaylist] = useState(null);
+    const [content, setContent] = useState([]);
     const [playerActive, setPlayerActive] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const classes = useStyles();
 
     const changePlaylist = (key) => {
-        if (PLAYLISTS.length > key) {
-            setPlaylist(PLAYLISTS[key]);
+        const ind = parseInt(key);
+        if (lists.length > ind) {
+            setPlaylist(lists[ind]);
         }
     };
 
-    const switchPlayerActive = (playerAvtive) => setPlayerActive(!playerActive);
+    const switchPlayerActive = () => setPlayerActive(!playerActive);
 
     return (
-        <div className='container mx-auto text-center pt-3'>
-            <h1 className='h4-responsive'>Анонимный проигрыватель youtube-видео</h1>
-            <hr/>
-            <DropDown data={getPlaylists()}
-                      ariaInfo={'operation-dropdown'}
-                      togglerText={playlist ? playlist['title'] : 'выбор плейлиста...'} callback={changePlaylist}
-                   />
-            {playlist ?
-                <button className='btn btn-sm'
-                        onClick={switchPlayerActive}>{playerActive ? 'выключить плеер' : 'включить плеер'}</button> :
-                null
-            }
-            <hr/>
-            <PlayListContainer playlist={playlist} playerActive={playerActive}/>
-        </div>
+
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <Container className={classes.app}>
+
+                <Header classes={classes} lists={lists} callback={changePlaylist} playlist={playlist}
+                        switchPlayerActive={switchPlayerActive} playerActive={playerActive}/>
+
+                <Paper className={classes.paperWhite}>
+                    <Typography className='' variant='h5'>Анонимный проигрыватель youtube-видео</Typography>
+                    <PlayListContainer playlist={playlist} playerActive={playerActive} content={content}
+                                       setContent={setContent}/>
+                    <Aside classes={classes} open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}
+                           playlist={playlist} data={content} playerActive={playerActive}/>
+                    <Player data={content} playerActive={playerActive}/>
+                </Paper>
+
+                <Footer classes={classes} setIsDrawerOpen={setIsDrawerOpen}
+                        setIsFormOpen={setIsFormOpen}/>
+
+                <Form isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} lists={lists} setLists={setLists}/>
+            </Container>
+        </ThemeProvider>
     );
 };
 
