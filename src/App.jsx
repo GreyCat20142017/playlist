@@ -12,7 +12,7 @@ import {useStyles} from './App.css.js';
 import Aside from './components/aside/Aside';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
-import Form from './components/form/Form';
+import FormDialog from './components/form/FormDialog';
 
 const App = () => {
     const [lists, setLists] = useState(getLocalPlaylists());
@@ -45,7 +45,7 @@ const App = () => {
                     <Typography className='' variant='h5'>Анонимный проигрыватель youtube-видео</Typography>
                     <PlayListContainer playlist={playlist} playerActive={playerActive} content={content}
                                        setContent={setContent}/>
-                    <Aside classes={classes} open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}
+                    <Aside classes={classes} isDrawerOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}
                            playlist={playlist} data={content} playerActive={playerActive}/>
                     <Player data={content} playerActive={playerActive}/>
                 </Paper>
@@ -53,7 +53,7 @@ const App = () => {
                 <Footer classes={classes} setIsDrawerOpen={setIsDrawerOpen}
                         setIsFormOpen={setIsFormOpen}/>
 
-                <Form isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} lists={lists} setLists={setLists}/>
+                <FormDialog isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} lists={lists} setLists={setLists}/>
             </Container>
         </ThemeProvider>
     );

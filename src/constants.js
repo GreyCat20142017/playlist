@@ -4,11 +4,15 @@ export const APP_ROOT = ((url.match(/github\.io/gi)) ? '/playlist' : '');
 export const PLAYLISTS = [
     {
         'title': 'Santiano',
-        'href': APP_ROOT + '/data/playlistSantiano.json'
+        'href': APP_ROOT + '/data/playlistSantiano.json',
+        'fromJson': true,
+        'content': null
     },
     {
         'title': 'Zaz',
-        'href': APP_ROOT + '/data/playlistZaz.json'
+        'href': APP_ROOT + '/data/playlistZaz.json',
+        'fromJson': true,
+        'content' : null
     }
 ];
 

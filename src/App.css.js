@@ -32,11 +32,6 @@ export const useStyles = makeStyles({
             marginLeft: 'auto',
             marginRight: theme.spacing(1)
         },
-        drawer: {
-            width: '320px',
-            padding: theme.spacing(1),
-            textAlign: 'center'
-        },
         submenu: {
             display: 'flex',
             flexDirection: 'column'
@@ -89,9 +84,6 @@ export const useStyles = makeStyles({
        ml: {
             marginLeft: theme.spacing(1),
             marginRight: theme.spacing(2)
-       },
-       fabCenter: {
-            margin: '20px auto 0'
        }
     }
 );

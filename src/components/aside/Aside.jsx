@@ -6,24 +6,43 @@ import {Drawer, Fab, Typography} from '@material-ui/core';
 import MUIIcon from '../icon/MUIIcon';
 import PlayList from '../PlayList';
 import {isData} from '../../functions';
+import {makeStyles} from '@material-ui/core/styles';
+import {theme} from '../../theme';
 
-const Aside = (props) => (
-    <Drawer className={props.classes.drawer} open={props.open} onClose={props.onClose}>
-        {props.playlist && isData(props.data) ?
-            <PlayList title={props.playlist.title} data={props.data} playerActive={props.playerActive}/> :
-            <Typography variant={'h5'}>Нет активного плейлиста</Typography>
-        }
-        <Fab className={props.classes.fabCenter} size={'small'} color='primary' onClick={props.onClose}>
-            <MUIIcon icon={'Close'}/>
-        </Fab>
-    </Drawer>
-);
+const useStyles = makeStyles({
+    drawer: {
+        width: '320px',
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    fabCenter: {
+        margin: '20px auto 0'
+    }
+});
+
+const Aside = ({data = [], isDrawerOpen = false, onClose, playlist = null, playerActive}) => {
+    const classes = useStyles();
+
+    return (<Drawer className={classes.drawer} open={isDrawerOpen} onClose={onClose}>
+            {playlist && isData(data) ?
+                <PlayList title={playlist.title} data={data} playerActive={playerActive}/> :
+                <Typography variant={'h5'}>Нет активного плейлиста</Typography>
+            }
+            <Fab className={classes.fabCenter} size={'small'} color='primary' onClick={onClose}>
+                <MUIIcon icon={'Close'}/>
+            </Fab>
+        </Drawer>
+    );
+};
 
 Aside.propTypes = {
     classes: PropTypes.object,
-    open: PropTypes.bool,
+    isDrawerOpen: PropTypes.bool,
     onClose: PropTypes.func,
-    playlist: PropTypes.object||null,
+    playlist: PropTypes.object || null,
     data: PropTypes.arrayOf(PropTypes.object),
     playerActive: PropTypes.bool
 };

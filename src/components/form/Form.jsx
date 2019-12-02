@@ -1,95 +1,88 @@
 import React, {useState} from 'react';
 
-import {Button, TextField, Divider, Typography} from '@material-ui/core';
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
-import MUITable from '../table/MUITable';
+import {Button, Divider, TextField, Typography, Switch, FormControlLabel} from '@material-ui/core';
+import * as PropTypes from 'prop-types';
 import {isValidUrl} from '../../functions';
 
-const Form = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
-        const [name, setName] = useState('');
-        const [link, setLink] = useState('');
-        const [errors, setErrors] = useState({});
+const DEFAULT_ERRORS_STATE = {
+    title: null,
+    href: null
+};
 
-        const onSave = () => {
-            setIsFormOpen(false);
-            console.log('save to LS');
-        };
+const isFormValid = (err) => (!(err['href'] || err['title']));
 
-        const onClose = () => {
-            setIsFormOpen(false);
-        };
+const Form = ({lists, setLists}) => {
+    const [title, setTitle] = useState('');
+    const [href, setHref] = useState('');
+    const [fromJson, setFromJson] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errors, setErrors] = useState({...DEFAULT_ERRORS_STATE});
 
-        const formValidate = (evt) => {
-            evt.preventDefault();
-            const linkError = (link.trim() === '') || !isValidUrl(link) ? 'Ссылка должна быть заполнена и быть корректной.' : null;
-            const nameError = (name.trim() === '') ? 'Название должно быть заполнено' : null;
-            setErrors({
-                name: nameError,
-                link: linkError
-            });
-            return () => addNew();
-        };
+    const addNew = () => {
+        if (isFormValid(errors) && isSubmitting) {
+            setLists([...lists, {
+                title,
+                href,
+                fromJson: fromJson,
+                content: fromJson ? null : []
+            }]);
+            setTitle('');
+            setHref('');
+            setErrors({...DEFAULT_ERRORS_STATE});
+            setIsSubmitting(false);
+        }
+    };
 
-        const addNew = () => {
-            if (!errors['link'] && !errors['name']) {
-                setLists([...lists, {
-                    title: name,
-                    href: link
-                }]);
-                setName('');
-                setLink('');
-                setErrors({});
-            }
-        };
+    const formValidate = () => {
+        const hrefError =  fromJson && ((href.trim() === '') || !isValidUrl(href)) ? 'Ссылка должна быть заполнена и быть корректной.' : null;
+        const titleError = (title.trim() === '') ? 'Название должно быть заполнено' : null;
+        setErrors({
+            title: titleError,
+            href: hrefError
+        });
+        return addNew();
+    };
 
-        const changeName = (evt) => (setName(evt.target.value));
-        const changeLink = (evt) => (setLink(evt.target.value));
+    const switchFromJson = () => (setFromJson(!fromJson));
 
-        const errorMessage = Object.keys(errors).map(key => errors[key]).join(', ');
+    const onFormSubmit = (evt) => {
+        evt.preventDefault();
+        setIsSubmitting(true);
+        formValidate();
+    };
 
-        return (
-            <Dialog open={isFormOpen} onClose={onClose} aria-labelledby='form-dialog-title'>
-                <DialogTitle id='form-dialog-title'>Добавление в список плейлистов</DialogTitle>
+    const onChangeTitle = (evt) => (setTitle(evt.target.value));
+    const onChangeHref = (evt) => (setHref(evt.target.value));
 
-                <DialogContent>
-                    <DialogContentText>
-                        <Typography variant='caption'>
-                            Для дополнения списка плейлистов нужно добавить название плейлиста и ссылку на файл плейлиста
-                            (https://ИмяРесурса/ИмяФайла).
-                            Файл с описанием плейлиста представляет собой массив объектов с полями 'title' и 'link' в
-                            формате json.
-                            Поле 'link' - ссылка на видео youtube, полученная через функцию 'ПОДЕЛИТЬСЯ'
-                        </Typography>
-                    </DialogContentText>
-                    <Divider/>
-                    <form onSubmit={formValidate}>
-                        <TextField value={name} onChange={changeName} error={errors['name'] ? true : false}
-                                   autoFocus margin='dense' id='title' label='Название плейлиста' type='text' fullWidth/>
-                        <TextField value={link} onChange={changeLink} error={errors['link'] ? true : false}
-                                   autoFocus margin='dense' id='link' label='Ссылка на файл плейлиста' type='text'
-                                   fullWidth/>
-                        <Button type='submit' style={{margin: '10px auto'}} variant='contained' color='primary' size='small'
-                                onClick={formValidate}>
-                            добавить
-                        </Button>
-                        <Divider/>
-                        <Typography variant={'caption'} color={'error'}>{errorMessage}</Typography>
-                    </form>
+    const errorMessage = Object.keys(errors).map(key => errors[key]).join(', ');
 
-                    <MUITable data={lists} size={'small'} rowsLimit={5} columns={['title']} hoverField={'href'}/>
-                </DialogContent>
+    return (
 
-                <DialogActions>
-                    <Button onClick={onClose} color='primary'>
-                        Отмена
-                    </Button>
-                    <Button onClick={onSave} color='primary'>
-                        Сохранить изменения в LocalStorage
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
-;
+        <form onSubmit={onFormSubmit}>
+            <FormControlLabel
+                control={<Switch color={'primary'} checked={fromJson} onChange={switchFromJson} value={'fromJson'}/>}
+                label="Использовать Json (а не хранилище)"
+            />
+            <TextField value={title} onChange={onChangeTitle} error={errors['title'] ? true : false}
+                       autoFocus margin='dense' id='title' label='Название плейлиста' type='text' fullWidth/>
+
+            <TextField value={href} onChange={onChangeHref} error={errors['href'] ? true : false}
+                       autoFocus margin='dense' id='href' label='Ссылка на файл плейлиста' type='text'
+                       fullWidth disabled={!fromJson}/>
+
+            <Button type='submit' style={{margin: '10px auto'}} variant='contained' color='primary' size='small'
+                    onClick={onFormSubmit}>
+                добавить
+            </Button>
+            <Divider/>
+            <Typography variant={'caption'} color={'error'}>{errorMessage}</Typography>
+        </form>
+    );
+};
+
+Form.propTypes = {
+    lists: PropTypes.arrayOf(PropTypes.object),
+    setLists: PropTypes.func,
+};
 
 export default Form;
