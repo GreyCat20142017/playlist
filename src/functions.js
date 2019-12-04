@@ -43,15 +43,29 @@ export const getTextForm = (sourceNumber, textForms) => {
     return textForms[2];
 };
 
-const getClearStorageData = (data) => (
-    Array.isArray(data) ? data.filter(item => (item['title'] && item['href']
-        && isValidUrl(item['href']) && isYoutubeUrl(item['href']))) : []
+export const getClearData = (data) => data.map(el => {
+    el['link'] = el['link'] ? extractYoutubeId(el['link']) : '';
+    return el;
+});
+
+export const getFilteredData = (data) => (
+    Array.isArray(data) ? data.filter(item => (item['title'] && item['link']
+        && isValidUrl(item['link']) && isYoutubeUrl(item['link']))) : []
 );
 
 export const getLocalPlaylists = () => {
-    const storageData = localStorage.getItem(LOCAL_STORAGE) ?
-        getClearStorageData(JSON.parse(localStorage.getItem(LOCAL_STORAGE))) : [];
+    const storageData = localStorage.getItem(LOCAL_STORAGE) ? JSON.parse(localStorage.getItem(LOCAL_STORAGE)) : [];
     return [...PLAYLISTS, ...storageData];
+};
+
+export const setLocalPlaylists = (lists) => {
+    let result = null;
+    try {
+        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(lists.filter(list => !list['default'])));
+    } catch (err) {
+        result = err.message;
+    }
+    return result;
 };
 
 export const isValidUrl = (url) => {
@@ -64,9 +78,11 @@ export const isValidUrl = (url) => {
     return pattern.test(url);
 };
 
-export const getClearData = (data) => data.map(el => {
-    el['link'] = el['link'] ? extractYoutubeId(el['link']) : '';
-    return el;
-});
+export const  getTableActions = (onDelete = null, onEdit = null ) => (
+    {
+        delete: {'title' : 'удалить',  icon: 'Delete', onCallback: onDelete},
+        edit: {'title' : 'изменить',  icon: 'Edit', onCallback: onEdit},
+    }
+);
 
 export const isData = (data) => (data && Array.isArray(data) && data.length > 0);

@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 
 import {Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, makeStyles} from '@material-ui/core';
 import {theme} from '../../theme';
+import ActionsHeaders from './actions/ActionsHeaders';
+import ActionsCells from './actions/ActionsCells';
 
 const useStyles = () => makeStyles({
     root: {
@@ -21,7 +23,12 @@ const getHoverTitle = (row, hoverField) => (
     hoverField && row[hoverField] ? hoverField + ' : ' + row[hoverField] : ''
 );
 
-const MUITable = ({data, columns, rowsLimit = 10, size = 'small', maxWidth = '100%', hoverField = null}) => {
+/**
+ * @param actions = {'delete: {'title' : 'удалить',  icon: 'Delete', callback: }}
+ */
+
+const MUITable = ({data, columns, rowsLimit = 10, size = 'small', maxWidth = '100%',
+                      hoverField = null, actions = null}) => {
     const classes = useStyles(maxWidth);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(rowsLimit);
@@ -47,6 +54,7 @@ const MUITable = ({data, columns, rowsLimit = 10, size = 'small', maxWidth = '10
                                         {column}
                                     </TableCell>
                                 ))}
+                                <ActionsHeaders actions={actions}/>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -59,6 +67,7 @@ const MUITable = ({data, columns, rowsLimit = 10, size = 'small', maxWidth = '10
                                                 </TableCell>
                                             )
                                         )}
+                                        <ActionsCells actions={actions} rowInd={rowInd + rowsPerPage * page}/>
                                     </TableRow>
                                 ))
                             }

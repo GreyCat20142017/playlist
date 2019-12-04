@@ -1,12 +1,12 @@
 import React from 'react';
-import {Button, Menu, MenuItem} from '@material-ui/core';
+import {Fab, Menu, MenuItem} from '@material-ui/core';
 
 import MUIIcon from '../icon/MUIIcon';
 import {useStyles} from '../../App.css';
 
 const Submenu = ({
                      submenuItems = [], callback = null,
-                     switchIcon = 'More', text = ''
+                     switchIcon = 'More', text = '', prompt = 'выбор'
                  }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const classes = useStyles();
@@ -30,12 +30,11 @@ const Submenu = ({
 
     return (
         <>
-            <Button color={'inherit'}
+            <Fab color='primary'  aria-label='playlist content' size='small' title={prompt}
                     aria-controls='submenu' aria-haspopup='true' onClick={handleClick}
                     disabled={submenuItems.length === 0}>
                 <MUIIcon icon={switchIcon}/>
-
-            </Button>
+            </Fab>
             <Menu className={classes.submenu}
                   id='submenu'
                   anchorEl={anchorEl}

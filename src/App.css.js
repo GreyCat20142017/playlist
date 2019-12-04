@@ -84,6 +84,11 @@ export const useStyles = makeStyles({
        ml: {
             marginLeft: theme.spacing(1),
             marginRight: theme.spacing(2)
-       }
+       },
+      fabParent: {
+          '& > *': {
+              marginRight: theme.spacing(2),
+          },
+      }
     }
 );

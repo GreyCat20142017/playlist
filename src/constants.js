@@ -4,15 +4,17 @@ export const APP_ROOT = ((url.match(/github\.io/gi)) ? '/playlist' : '');
 export const PLAYLISTS = [
     {
         'title': 'Santiano',
-        'href': APP_ROOT + '/data/playlistSantiano.json',
+        'href': APP_ROOT + 'data/playlistSantiano.json',
         'fromJson': true,
-        'content': null
+        'content': null,
+        'default': true
     },
     {
         'title': 'Zaz',
-        'href': APP_ROOT + '/data/playlistZaz.json',
+        'href': APP_ROOT + 'data/playlistZaz.json',
         'fromJson': true,
-        'content' : null
+        'content' : null,
+        'default': true
     }
 ];
 
@@ -32,6 +34,7 @@ export const ROWS_LIMIT = 10;
 
 /**
  * Пока непонятно, почему в новой версии какие-то проблемы с применением некоторых стилей.
- * Поэтому- пока странное ниже...
+ * Поэтому- пока странное ниже... Кажется, в этой версии MUI не ко всем элементам можно применять классы.
+ * В примерах стилизуют через родительские селекторы. Баг или фича?
  */
 export const MARGINLEFT = {marginLeft: 'auto', marginRight: '10px'};

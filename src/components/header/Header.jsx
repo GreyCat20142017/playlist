@@ -1,27 +1,29 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 
-import {AppBar, IconButton, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, Fab, Toolbar, Typography} from '@material-ui/core';
 
 import Submenu from '../submenu/Submenu';
 import MUIIcon from '../icon/MUIIcon';
 import {getPlaylists} from '../../functions';
 import {MARGINLEFT} from '../../constants';
+import classNames from 'classnames';
 
 const Header = ({classes, lists = [], callback, playlist, playerActive, switchPlayerActive}) => (
     <AppBar position='static'>
         <Toolbar className={classes.spaceBetween}>
-            <div className={classes.paperFlexFull}>
+            <div className={classNames(classes.paperFlexFull, classes.fabParent)}>
+
                 <Submenu submenuItems={getPlaylists(lists)} withNavLink={false} callback={callback}
-                         switchIcon={'Playlist'}/>
+                         switchIcon={'SelectList'} prompt={'Выбор из списка плейлистов'}/>
                 <Typography className={classes.ml} variant={playlist ? 'h6' : 'caption'}>
                     {playlist ? playlist.title : 'плейлист не выбран'}
                 </Typography>
                 {playlist ?
-                    <IconButton onClick={switchPlayerActive} color='inherit'
-                                title={playerActive ? 'выключить плеер' : 'включить плеер'}>
+                    <Fab color='primary'  aria-label='playlist content' size='small'
+                     onClick={switchPlayerActive} title={playerActive ? 'выключить плеер' : 'включить плеер'}>
                         <MUIIcon icon={playerActive ? 'Off' : 'On'} size={'large'}/>
-                    </IconButton>
+                    </Fab>
                     : null
                 }
                 <Typography style={MARGINLEFT} variant='h6'>playlist</Typography>

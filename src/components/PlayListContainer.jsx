@@ -1,16 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
-import {getClearData} from '../functions';
+import {getClearData, getFilteredData} from '../functions';
 
 const PlayListContainer = ({playlist, setContent}) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const getData = (playlist) => {
-            axios.get(playlist.href)
-                .then(res => setContent(getClearData(res.data)))
-                .catch(err => setError(err.message));
+        const getData = async (playlist) => {
+            const res = await axios.get(playlist.href);
+            try {
+                setContent(res ? getClearData(getFilteredData(res.data)) : []);
+            } catch (err) {
+                setError(err.message);
+            }
         };
 
         if (playlist) {

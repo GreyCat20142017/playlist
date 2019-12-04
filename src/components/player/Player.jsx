@@ -15,8 +15,8 @@ const Player = ({data = null, playerActive = false}) => {
     return (
         <>
             {enablePlayer ?
-                <p className={classes.iframe}>{data.length} : {youSrc}</p> :
-                //<iframe className={classes.iframe} src={youSrc} title={first} id={first}></iframe> :
+                // <p className={classes.iframe}>{data.length} : {youSrc}</p> :
+                <iframe className={classes.iframe} src={youSrc} title={first} id={first}></iframe> :
                 null
             }
         </>

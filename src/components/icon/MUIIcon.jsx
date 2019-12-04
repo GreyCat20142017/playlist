@@ -2,7 +2,8 @@ import React from 'react';
 
 import {
     Home, Settings, Search, CloudQueue as Sky, Info, MoreVert as More, HelpOutline as Help, Menu,
-    MusicNote as MusicOn, MusicOff, QueueMusic as List, Close, PlaylistPlay, PlaylistAdd, Pets
+    MusicNote as MusicOn, MusicOff, QueueMusic as List, Close, PlaylistPlay, PlaylistAdd, Pets,
+    MenuOpen as SelectList, Delete, Edit
 } from '@material-ui/icons';
 
 
@@ -38,6 +39,12 @@ const MUIIcon = ({icon, iconSize = 'small'}) => {
             return <Close fontSize={iconSize}/>;
         case 'Paw':
             return <Pets fontSize={iconSize}/>;
+        case 'SelectList':
+            return <SelectList fontSize={iconSize}/>;
+        case 'Delete':
+            return <Delete fontSize={iconSize}/>;
+        case 'Edit':
+            return <Edit fontSize={iconSize}/>;
         default:
     }
     return null;

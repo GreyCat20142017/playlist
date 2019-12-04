@@ -1,27 +1,29 @@
-import {AppBar, IconButton, Toolbar} from '@material-ui/core';
+import React from 'react';
+import * as PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import {AppBar, Fab, Toolbar} from '@material-ui/core';
 import MUIIcon from '../icon/MUIIcon';
 import {MARGINLEFT} from '../../constants';
-import * as PropTypes from 'prop-types';
-import React from 'react';
 
 const Footer = ({classes, setIsDrawerOpen, setIsFormOpen}) => (
     <AppBar position='static'>
         <Toolbar className={classes.spaceBetween}>
-            <div className={classes.paperFlexFull}>
-                <IconButton edge='start' color='inherit' aria-label='menu'
-                            onClick={() => setIsDrawerOpen(true)}
+            <div className={classNames(classes.paperFlexFull, classes.fabParent)}>
+                <Fab color='primary'  aria-label='playlist content' size='small'
+                     onClick={() => setIsDrawerOpen(true)}
                             title='Просмотр содержимого плейлиста (список)'>
                     <MUIIcon icon={'List'}/>
-                </IconButton>
-                <IconButton edge='start' color='inherit' aria-label='add playlist'
+                </Fab>
+                <Fab  color='primary' aria-label='add playlist' size='small'
                             onClick={() => setIsFormOpen(true)}
                             title='Добавление нового плейлиста'>
                     <MUIIcon icon={'PlaylistAdd'}/>
-                </IconButton>
-                <IconButton style={MARGINLEFT} color='inherit' aria-label='help'
+                </Fab>
+                <Fab style={MARGINLEFT} color='primary' aria-label='help' size='small'
                             title='Подсказка'>
                     <MUIIcon icon={'Help'}/>
-                </IconButton>
+                </Fab>
             </div>
         </Toolbar>
     </AppBar>
