@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+import * as PropTypes from 'prop-types';
 import {Button, Divider, Typography} from '@material-ui/core';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 
@@ -69,6 +69,13 @@ const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
 
         </Dialog>
     );
+};
+
+FormDialog.propTypes = {
+    isFormOpen: PropTypes.bool,
+    setIsFormOpen: PropTypes.func.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setLists: PropTypes.func.isRequired
 };
 
 export default FormDialog;

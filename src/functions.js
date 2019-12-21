@@ -78,11 +78,17 @@ export const isValidUrl = (url) => {
     return pattern.test(url);
 };
 
-export const  getTableActions = (onDelete = null, onEdit = null ) => (
+export const getTableActions = (onDelete = null, onEdit = null) => (
     {
-        delete: {'title' : 'удалить',  icon: 'Delete', onCallback: onDelete},
-        edit: {'title' : 'изменить',  icon: 'Edit', onCallback: onEdit},
+        delete: {'title': 'удалить', icon: 'Delete', onCallback: onDelete},
+        edit: {'title': 'изменить', icon: 'Edit', onCallback: onEdit},
     }
 );
 
 export const isData = (data) => (data && Array.isArray(data) && data.length > 0);
+
+export const isValidIndex = (index, testedArray) => (((index >= 0) && (index < testedArray.length)));
+
+export const getActiveStep = (playlist, playerActive) => (
+    playerActive && playlist ? 2 : playlist ? 1 : 0
+);

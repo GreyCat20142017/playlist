@@ -1,5 +1,5 @@
 const url = window.location.origin;
-export const APP_ROOT = ((url.match(/github\.io/gi)) ? '/playlist' : '');
+export const APP_ROOT = ((url.match(/github\.io/gi)) ? '/playlist/' : '');
 
 export const PLAYLISTS = [
     {
@@ -37,4 +37,8 @@ export const ROWS_LIMIT = 10;
  * Поэтому- пока странное ниже... Кажется, в этой версии MUI не ко всем элементам можно применять классы.
  * В примерах стилизуют через родительские селекторы. Баг или фича?
  */
-export const MARGINLEFT = {marginLeft: 'auto', marginRight: '10px'};
+export const MARGINAUTO = {marginLeft: 'auto', marginRight: '10px'};
+export const MARGINRIGHT = { marginRight: '10px'};
+
+export const PLAYER_STEPS =  ['Выбрать плейлист', 'Включить плеер', 'Запустить проигрывание плейлиста'];
+export const PLAYER_STEPS_ICONS = ['SelectList', 'On', 'Play'];

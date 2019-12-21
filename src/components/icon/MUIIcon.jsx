@@ -1,53 +1,59 @@
 import React from 'react';
-
+import * as PropTypes from 'prop-types';
 import {
-    Home, Settings, Search, CloudQueue as Sky, Info, MoreVert as More, HelpOutline as Help, Menu,
+    Home, Settings, Info, MoreVert as More, HelpOutline as Help, Menu,
     MusicNote as MusicOn, MusicOff, QueueMusic as List, Close, PlaylistPlay, PlaylistAdd, Pets,
-    MenuOpen as SelectList, Delete, Edit
+    MenuOpen as SelectList, Delete, Edit, PlayArrow, Done
 } from '@material-ui/icons';
 
 
-const MUIIcon = ({icon, iconSize = 'small'}) => {
+const MUIIcon = ({icon = '', iconSize = 'small', color = 'inherit'}) => {
     switch (icon) {
         case 'Menu':
-            return <Menu fontSize={iconSize}/>;
+            return <Menu fontSize={iconSize} color={color}/>;
         case 'Home':
-            return <Home fontSize={iconSize}/>;
+            return <Home fontSize={iconSize} color={color}/>;
         case 'Settings':
-            return <Settings fontSize={iconSize}/>;
-        case 'Search':
-            return <Search fontSize={iconSize}/>;
-        case 'Sky':
-            return <Sky fontSize={iconSize}/>;
+            return <Settings fontSize={iconSize} color={color}/>;
         case 'Info':
-            return <Info fontSize={iconSize}/>;
+            return <Info fontSize={iconSize} color={color}/>;
         case 'More':
-            return <More fontSize={iconSize}/>;
+            return <More fontSize={iconSize} color={color}/>;
         case 'Help':
-            return <Help fontSize={iconSize}/>;
+            return <Help fontSize={iconSize} color={color}/>;
         case 'On':
-            return <MusicOn fontSize={iconSize}/>;
+            return <MusicOn fontSize={iconSize} color={color}/>;
         case 'Off':
-            return <MusicOff fontSize={iconSize}/>;
+            return <MusicOff fontSize={iconSize} color={color}/>;
         case 'Playlist':
-            return <PlaylistPlay fontSize={iconSize}/>;
+            return <PlaylistPlay fontSize={iconSize} color={color}/>;
         case 'PlaylistAdd':
-            return <PlaylistAdd fontSize={iconSize}/>;
+            return <PlaylistAdd fontSize={iconSize} color={color}/>;
         case 'List':
-            return <List fontSize={iconSize}/>;
+            return <List fontSize={iconSize} color={color}/>;
         case 'Close':
-            return <Close fontSize={iconSize}/>;
+            return <Close fontSize={iconSize} color={color}/>;
         case 'Paw':
-            return <Pets fontSize={iconSize}/>;
+            return <Pets fontSize={iconSize} color={color}/>;
         case 'SelectList':
-            return <SelectList fontSize={iconSize}/>;
+            return <SelectList fontSize={iconSize} color={color}/>;
         case 'Delete':
-            return <Delete fontSize={iconSize}/>;
+            return <Delete fontSize={iconSize} color={color}/>;
         case 'Edit':
-            return <Edit fontSize={iconSize}/>;
+            return <Edit fontSize={iconSize} color={color}/>;
+        case 'Play':
+            return <PlayArrow fontSize={iconSize} color={color}/>;
+        case 'Done':
+            return <Done fontSize={iconSize} color={color}/>;
         default:
     }
     return null;
+};
+
+MUIIcon.propTypes = {
+    icon: PropTypes.string,
+    iconSize: PropTypes.string,
+    color: PropTypes.string
 };
 
 export default MUIIcon;

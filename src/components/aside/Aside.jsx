@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     }
 });
 
-const Aside = ({data = [], isDrawerOpen = false, onClose, playlist = null, playerActive}) => {
+const Aside = ({data = [], isDrawerOpen = false, onClose, playlist = null, playerActive = false}) => {
     const classes = useStyles();
 
     return (<Drawer className={classes.drawer} open={isDrawerOpen} onClose={onClose}>
@@ -41,7 +41,7 @@ const Aside = ({data = [], isDrawerOpen = false, onClose, playlist = null, playe
 Aside.propTypes = {
     classes: PropTypes.object,
     isDrawerOpen: PropTypes.bool,
-    onClose: PropTypes.func,
+    onClose: PropTypes.func.isRequired,
     playlist: PropTypes.object || null,
     data: PropTypes.arrayOf(PropTypes.object),
     playerActive: PropTypes.bool

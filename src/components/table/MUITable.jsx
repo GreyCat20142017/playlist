@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+import * as PropTypes from 'prop-types';
 import {Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, makeStyles} from '@material-ui/core';
 import {theme} from '../../theme';
 import ActionsHeaders from './actions/ActionsHeaders';
@@ -27,8 +27,10 @@ const getHoverTitle = (row, hoverField) => (
  * @param actions = {'delete: {'title' : 'удалить',  icon: 'Delete', callback: }}
  */
 
-const MUITable = ({data, columns, rowsLimit = 10, size = 'small', maxWidth = '100%',
-                      hoverField = null, actions = null}) => {
+const MUITable = ({
+                      data, columns, rowsLimit = 10, size = 'small', maxWidth = '100%',
+                      hoverField = null, actions = null
+                  }) => {
     const classes = useStyles(maxWidth);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(rowsLimit);
@@ -86,6 +88,16 @@ const MUITable = ({data, columns, rowsLimit = 10, size = 'small', maxWidth = '10
             </Paper>
         </div>
     );
+};
+
+MUITable.propTypes = {
+    data: PropTypes.array,
+    columns: PropTypes.array,
+    rowsLimit: PropTypes.number,
+    size: PropTypes.string,
+    maxWidth: PropTypes.string,
+    hoverField: PropTypes.string || null,
+    actions: PropTypes.object || null
 };
 
 export default MUITable;

@@ -5,14 +5,17 @@ import {Container, CssBaseline, Paper, Typography} from '@material-ui/core';
 
 import PlayListContainer from './components/PlayListContainer';
 import Player from './components/player/Player';
-
-import {getLocalPlaylists} from './functions';
-import {theme} from './theme';
-import {useStyles} from './App.css.js';
 import Aside from './components/aside/Aside';
 import Header from './components/header/Header';
 import Footer from './components/footer/Footer';
 import FormDialog from './components/form/FormDialog';
+import PlayerStepper from './components/stepper/PlayerStepper';
+import {getActiveStep, getLocalPlaylists, getPlaylists} from './functions';
+
+import {theme} from './theme';
+import {useStyles} from './App.css.js';
+import Comment from './components/comment/Comment';
+import Submenu from './components/submenu/Submenu';
 
 const App = () => {
     const [lists, setLists] = useState(getLocalPlaylists());
@@ -21,6 +24,7 @@ const App = () => {
     const [playerActive, setPlayerActive] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isStepperSubmenu, setIsStepperSubmenu] = useState(null);
     const classes = useStyles();
 
     const changePlaylist = (key) => {
@@ -48,6 +52,18 @@ const App = () => {
                     <Aside classes={classes} isDrawerOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}
                            playlist={playlist} data={content} playerActive={playerActive}/>
                     <Player data={content} playerActive={playerActive}/>
+                    {playlist && playerActive ?
+                        <Comment setPlayerActive={setPlayerActive}/> :
+                        <PlayerStepper activeStep={getActiveStep(playlist, playerActive)}
+                                       playlist={playlist} setPlaylist={setPlaylist} changePlaylist={changePlaylist}
+                                       playerActive={playerActive} setPlayerActive={setPlayerActive}
+                                       showSubmenu={setIsStepperSubmenu}
+                        />
+                    }
+
+                    <Submenu submenuItems={getPlaylists(lists)} withNavLink={false} callback={changePlaylist}
+                             switchIcon={'SelectList'} prompt={'Выбор из списка плейлистов'}
+                             anchor={isStepperSubmenu} showButton={false} showSubmenu={setIsStepperSubmenu}/>
                 </Paper>
 
                 <Footer classes={classes} setIsDrawerOpen={setIsDrawerOpen}

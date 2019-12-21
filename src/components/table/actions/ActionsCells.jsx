@@ -1,6 +1,7 @@
 import React from 'react';
-import MUIIcon from '../../icon/MUIIcon';
+import * as PropTypes from 'prop-types';
 import {Button, TableCell} from '@material-ui/core';
+import MUIIcon from '../../icon/MUIIcon';
 
 const ActionsCells = ({actions, rowInd}) => {
     const onButtonClick = (actions, key, rowInd) => {
@@ -22,6 +23,11 @@ const ActionsCells = ({actions, rowInd}) => {
             </TableCell>
         )) : null
     );
+};
+
+ActionsCells.propTypes = {
+  actions: PropTypes.object,
+  rowInd: PropTypes.number
 };
 
 export default ActionsCells;

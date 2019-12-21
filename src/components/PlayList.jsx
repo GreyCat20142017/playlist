@@ -1,5 +1,5 @@
 import React from 'react';
-
+import * as PropTypes from 'prop-types';
 import {Typography} from '@material-ui/core';
 
 import MUITable from './table/MUITable';
@@ -17,5 +17,10 @@ const PlayList = ({title, data}) => (
         </div>
     </>
 );
+
+PlayList.propTypes = {
+  title: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object)
+};
 
 export default PlayList;

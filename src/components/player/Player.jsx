@@ -1,5 +1,5 @@
 import React from 'react';
-
+import * as PropTypes from 'prop-types';
 import {useStyles} from './Player.css.js';
 import {YOUTUBE_EMBED} from '../../constants';
 import {isData} from '../../functions';
@@ -15,7 +15,6 @@ const Player = ({data = null, playerActive = false}) => {
     return (
         <>
             {enablePlayer ?
-                // <p className={classes.iframe}>{data.length} : {youSrc}</p> :
                 <iframe className={classes.iframe} src={youSrc} title={first} id={first}></iframe> :
                 null
             }
@@ -23,4 +22,9 @@ const Player = ({data = null, playerActive = false}) => {
     );
 };
 
+
+Player.propTypes = {
+    data: PropTypes.arrayOf(PropTypes.object) || null,
+    playerActive: PropTypes.bool
+};
 export default Player;

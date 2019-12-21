@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-
-import {Button, Divider, TextField, Typography, Switch, FormControlLabel} from '@material-ui/core';
 import * as PropTypes from 'prop-types';
+import {Button, Divider, TextField, Typography, Switch, FormControlLabel} from '@material-ui/core';
+
 import {isValidUrl} from '../../functions';
 
 const isFormValid = (err) => (!err || !(err['href'] || err['title']));
@@ -34,7 +34,7 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
         setTitle('');
         setHref('');
         setIsSubmitting(false);
-        setEdited(false);
+        setEdited(null);
     };
 
     const changeList = () => {
@@ -105,8 +105,10 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
 };
 
 Form.propTypes = {
-    lists: PropTypes.arrayOf(PropTypes.object),
-    setLists: PropTypes.func,
+    lists: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setLists: PropTypes.func.isRequired,
+    edited: PropTypes.object || null,
+    setEdited: PropTypes.func.isRequired
 };
 
 export default Form;

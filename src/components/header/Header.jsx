@@ -1,13 +1,12 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
-
+import classNames from 'classnames';
 import {AppBar, Fab, Toolbar, Typography} from '@material-ui/core';
 
 import Submenu from '../submenu/Submenu';
 import MUIIcon from '../icon/MUIIcon';
 import {getPlaylists} from '../../functions';
-import {MARGINLEFT} from '../../constants';
-import classNames from 'classnames';
+import {MARGINAUTO} from '../../constants';
 
 const Header = ({classes, lists = [], callback, playlist, playerActive, switchPlayerActive}) => (
     <AppBar position='static'>
@@ -20,13 +19,13 @@ const Header = ({classes, lists = [], callback, playlist, playerActive, switchPl
                     {playlist ? playlist.title : 'плейлист не выбран'}
                 </Typography>
                 {playlist ?
-                    <Fab color='primary'  aria-label='playlist content' size='small'
-                     onClick={switchPlayerActive} title={playerActive ? 'выключить плеер' : 'включить плеер'}>
+                    <Fab color='primary' aria-label='playlist content' size='small'
+                         onClick={switchPlayerActive} title={playerActive ? 'выключить плеер' : 'включить плеер'}>
                         <MUIIcon icon={playerActive ? 'Off' : 'On'} size={'large'}/>
                     </Fab>
                     : null
                 }
-                <Typography style={MARGINLEFT} variant='h6'>playlist</Typography>
+                <Typography style={MARGINAUTO} variant='h6'>playlist</Typography>
                 <MUIIcon icon={'Paw'} size={'large'}/>
             </div>
         </Toolbar>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import * as PropTypes from 'prop-types';
 import axios from 'axios';
-
 import {getClearData, getFilteredData} from '../functions';
 
 const PlayListContainer = ({playlist, setContent}) => {
@@ -28,6 +28,11 @@ const PlayListContainer = ({playlist, setContent}) => {
         </>
     );
 };
+
+PlayListContainer.propTypes = {
+    playlist: PropTypes.object,
+    setContent: PropTypes.func.isRequired
+}
 
 export default PlayListContainer;
 
