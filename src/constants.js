@@ -42,3 +42,7 @@ export const MARGINRIGHT = { marginRight: '10px'};
 
 export const PLAYER_STEPS =  ['Выбрать плейлист', 'Включить плеер', 'Запустить проигрывание плейлиста'];
 export const PLAYER_STEPS_ICONS = ['SelectList', 'On', 'Play'];
+
+export const LFSTORE = 'playlists';
+
+export const LIST_KEY = 'list';

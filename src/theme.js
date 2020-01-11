@@ -10,7 +10,8 @@ export const theme = createMuiTheme({
     palette: {
         primary: {
             main: MDB_COLOR,
-            light: DEFAULT_COLOR
+            light: DEFAULT_COLOR,
+            contrastText: 'white'
         },
         secondary: {
             main: blueGrey[200],

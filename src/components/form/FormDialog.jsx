@@ -1,15 +1,34 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as PropTypes from 'prop-types';
-import {Button, Divider, Typography} from '@material-ui/core';
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import {localforage as lf} from '../../localforage';
+import {
+    Button, Divider, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+} from '@material-ui/core';
+import {Add} from '@material-ui/icons';
 
 import MUITable from '../table/MUITable';
 import Form from './Form';
-import {getTableActions, setLocalPlaylists} from '../../functions';
+import {getClearData, getFilteredData, getNewKey, getTableActions, setLocalPlaylists} from '../../functions';
+import axios from 'axios';
+import {LIST_KEY} from '../../constants';
+
+const getContent = async (href) => {
+    const res = await axios.get(href);
+    try {
+        return res ? getClearData(getFilteredData(res.data)) : [];
+    } catch (err) {
+        return [];
+    }
+};
 
 const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
     const [status, setStatus] = useState(null);
     const [edited, setEdited] = useState(null);
+    const [jsonLists, setJsonLists] = useState([]);
+
+    useEffect(() => {
+        setJsonLists(lists.filter(list => list.fromJson));
+    }, [lists, setJsonLists]);
 
     const onSave = () => {
         const result = setLocalPlaylists(lists);
@@ -17,6 +36,7 @@ const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
             setStatus(result);
         } else {
             setIsFormOpen(false);
+            setEdited(null);
         }
     };
 
@@ -25,18 +45,36 @@ const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
     };
 
     const onDelete = (ind) => {
-       const newLists = [...lists];
-       newLists.splice(ind, 1);
-       setLists(newLists);
+        const newLists = [...lists];
+        newLists.splice(ind, 1);
+        setLists(newLists);
     };
 
     const onEdit = (ind) => {
-        setEdited({...lists[ind], 'index' : ind});
+        setEdited({...lists[ind], 'index': ind});
+    };
+
+    const onCreate = () => {
+        setEdited({ title: '', fromJson: true, 'index': -1});
+    };
+
+    const onExport = async (ind) => {
+        const title = lists[ind]['title'];
+        const content = await getContent(lists[ind]['href']);
+        const key = getNewKey();
+        lf.getItem(LIST_KEY).then(lfdata => {
+            const data = lfdata ? lfdata : [];
+            lf.setItem(LIST_KEY, [...data, {key, title}]).then(() => {
+                    setLists([...lists, {title, fromJson: false}]);
+                    lf.setItem(key, content);
+                }
+            );
+        });
     };
 
     return (
         <Dialog open={isFormOpen} onClose={onClose} aria-labelledby='form-dialog-title'>
-            <DialogTitle id='form-dialog-title'>Редактирование списка плейлистов</DialogTitle>
+            <DialogTitle id='form-dialog-title'>Редактирование списка Json-плейлистов</DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     <Typography variant='caption'>
@@ -49,10 +87,15 @@ const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
                 </DialogContentText>
                 <Divider/>
 
-                <Form lists={lists} setLists={setLists} edited={edited} setEdited={setEdited}/>
-
-                <MUITable data={lists} size={'small'} rowsLimit={5} columns={['title']}
-                          hoverField={'href'} actions={getTableActions(onDelete, onEdit)}/>
+                {edited ?
+                    <Form lists={lists} setLists={setLists}
+                          edited={edited} setEdited={setEdited}/>
+                    :
+                    <>
+                        <IconButton onClick={onCreate} title={'добавить'}><Add/></IconButton>
+                        <MUITable data={jsonLists ? jsonLists : []} size={'small'} rowsLimit={5} columns={['title']}
+                                  hoverField={'href'} actions={getTableActions(onDelete, onEdit, onExport)}/>
+                    </>}
             </DialogContent>
 
             <DialogActions>

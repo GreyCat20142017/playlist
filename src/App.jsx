@@ -16,6 +16,7 @@ import {theme} from './theme';
 import {useStyles} from './App.css.js';
 import Comment from './components/comment/Comment';
 import Submenu from './components/submenu/Submenu';
+import LfDialog from './components/formlf/LfDialog';
 
 const App = () => {
     const [lists, setLists] = useState(getLocalPlaylists());
@@ -23,6 +24,7 @@ const App = () => {
     const [content, setContent] = useState([]);
     const [playerActive, setPlayerActive] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isLfOpen, setIsLfOpen] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isStepperSubmenu, setIsStepperSubmenu] = useState(null);
     const classes = useStyles();
@@ -67,9 +69,10 @@ const App = () => {
                 </Paper>
 
                 <Footer classes={classes} setIsDrawerOpen={setIsDrawerOpen}
-                        setIsFormOpen={setIsFormOpen}/>
+                        setIsFormOpen={setIsFormOpen} setIsLfOpen={setIsLfOpen}/>
 
                 <FormDialog isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} lists={lists} setLists={setLists}/>
+                <LfDialog isLfOpen={isLfOpen} setIsLfOpen={setIsLfOpen} lists={lists} setLists={setLists}/>
             </Container>
         </ThemeProvider>
     );

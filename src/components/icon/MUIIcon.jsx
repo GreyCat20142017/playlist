@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import {
     Home, Settings, Info, MoreVert as More, HelpOutline as Help, Menu,
     MusicNote as MusicOn, MusicOff, QueueMusic as List, Close, PlaylistPlay, PlaylistAdd, Pets,
-    MenuOpen as SelectList, Delete, Edit, PlayArrow, Done
+    MenuOpen as SelectList, Delete, Edit, PlayArrow, Done, Storage, ListAlt
 } from '@material-ui/icons';
 
 
@@ -45,6 +45,10 @@ const MUIIcon = ({icon = '', iconSize = 'small', color = 'inherit'}) => {
             return <PlayArrow fontSize={iconSize} color={color}/>;
         case 'Done':
             return <Done fontSize={iconSize} color={color}/>;
+        case 'Storage':
+            return <Storage fontSize={iconSize} color={color}/>;
+        case 'ListAlt':
+            return <ListAlt fontSize={iconSize} color={color}/>;
         default:
     }
     return null;

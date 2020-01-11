@@ -8,7 +8,9 @@ const isShort = (url) => {
     return (url.indexOf(SHORT) !== -1);
 };
 
-const isYoutubeUrl = (url) => (isLong(url)) || isShort(url);
+export const isYoutubeUrl = (url) => (isLong(url)) || isShort(url);
+
+export const isMaybeYoutubeId = (url) => (url.length === YOUTUBE_ID_LENGTH);
 
 const truncAdditionalParams = (url) => (url.split('&')[0]);
 
@@ -18,7 +20,7 @@ export const extractYoutubeId = (url) => {
     let result = truncAdditionalParams(url);
     result = isLong(url) ? strReplace(result, LONG) : result;
     result = isShort(url) ? strReplace(result, SHORT) : result;
-    return result.length === YOUTUBE_ID_LENGTH ? result : '';
+    return isMaybeYoutubeId(result) ? result : '';
 };
 
 export const getPlaylists = (lists) => (
@@ -78,12 +80,19 @@ export const isValidUrl = (url) => {
     return pattern.test(url);
 };
 
-export const getTableActions = (onDelete = null, onEdit = null) => (
-    {
-        delete: {'title': 'удалить', icon: 'Delete', onCallback: onDelete},
-        edit: {'title': 'изменить', icon: 'Edit', onCallback: onEdit},
+export const getTableActions = (onDelete = null, onEdit = null, onExport = null) => {
+    const actions = {};
+    if (onDelete) {
+        actions['delete'] = {'title': 'удалить', icon: 'Delete', onCallback: onDelete};
     }
-);
+    if (onEdit) {
+        actions['edit'] = {'title': 'изменить', icon: 'Edit', onCallback: onEdit};
+    }
+    if (onExport) {
+        actions['export'] = {'title': 'экспорт в LocalForage', icon: 'Storage', onCallback: onExport};
+    }
+    return actions;
+};
 
 export const isData = (data) => (data && Array.isArray(data) && data.length > 0);
 
@@ -92,3 +101,7 @@ export const isValidIndex = (index, testedArray) => (((index >= 0) && (index < t
 export const getActiveStep = (playlist, playerActive) => (
     playerActive && playlist ? 2 : playlist ? 1 : 0
 );
+
+export const isError = (errors, fieldName) => (errors && errors[fieldName]);
+
+export const getNewKey = () => ('id-' + (+new Date()));

@@ -6,7 +6,7 @@ import {AppBar, Fab, Toolbar, Typography} from '@material-ui/core';
 import MUIIcon from '../icon/MUIIcon';
 import {MARGINAUTO, MARGINRIGHT} from '../../constants';
 
-const Footer = ({classes, setIsDrawerOpen, setIsFormOpen}) => (
+const Footer = ({classes, setIsDrawerOpen, setIsFormOpen, setIsLfOpen}) => (
     <AppBar position='static'>
         <Toolbar className={classes.spaceBetween}>
             <div className={classNames(classes.paperFlexFull, classes.fabParent)}>
@@ -17,8 +17,13 @@ const Footer = ({classes, setIsDrawerOpen, setIsFormOpen}) => (
                 </Fab>
                 <Fab color='primary' aria-label='add playlist' size='small' style={MARGINRIGHT}
                      onClick={() => setIsFormOpen(true)}
-                            title='Добавление нового плейлиста'>
+                            title='Добавление нового плейлиста (на основе Json)'>
                     <MUIIcon icon={'PlaylistAdd'}/>
+                </Fab>
+                <Fab color='primary' aria-label='add playlist' size='small' style={MARGINRIGHT}
+                     onClick={() => setIsLfOpen(true)}
+                            title='Изменение локальных плейлистов'>
+                    <MUIIcon icon={'ListAlt'}/>
                 </Fab>
                 <Typography style={MARGINAUTO} variant={'body2'}>2019</Typography>
             </div>

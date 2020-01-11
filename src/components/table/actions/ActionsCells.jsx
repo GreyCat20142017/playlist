@@ -6,7 +6,6 @@ import MUIIcon from '../../icon/MUIIcon';
 const ActionsCells = ({actions, rowInd}) => {
     const onButtonClick = (actions, key, rowInd) => {
         if (actions[key]['onCallback']) {
-
             actions[key].onCallback(rowInd);
         }
     };
