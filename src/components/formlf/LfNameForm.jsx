@@ -22,7 +22,7 @@ const LfNameForm = ({title, onSaveTitle, change = false}) => {
             <TextField defaultValue={title} variant='outlined'
                        name='title' inputRef={register({required: true})} error={!!isError(errors, 'title')}
                        margin='dense' id='title' label='Название плейлиста' type='text' fullWidth/>
-            <Button type='submit' color='primary' variant='contained' fullWidth title='сохранить и закрыть'>
+            <Button type='submit' color='primary' variant='contained'  title='сохранить и закрыть'>
                 сохранить
             </Button>
         </form>

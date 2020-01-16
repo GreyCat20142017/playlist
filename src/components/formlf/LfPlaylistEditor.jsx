@@ -1,20 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {Button, ButtonGroup, IconButton} from '@material-ui/core';
+import {Button, ButtonGroup, Divider, IconButton, Typography} from '@material-ui/core';
 import {Add} from '@material-ui/icons';
 import {localforage as lf} from '../../localforage';
 
 import LfForm from './LfForm';
 import MUITable from '../table/MUITable';
-import {getNewKey, getTableActions, isValidIndex} from '../../functions';
 import MUIIcon from '../icon/MUIIcon';
 import LfNameForm from './LfNameForm';
+import {JsonViewer} from './JsonViewer';
 import {LIST_KEY} from '../../constants';
+import {getNewKey, getTableActions, isValidIndex} from '../../functions';
 
 export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
     const [content, setContent] = useState([]);
     const [title, setTitle] = useState('');
     const [track, setTrack] = useState('');
     const [playlistKey, setPlaylistKey] = useState(null);
+    const [showJson, setShowJson] = useState(false);
+    const [editTitle, setEditTitle] = useState(false);
 
     useEffect(() => {
         const currentKey = edited['key'];
@@ -29,8 +32,8 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
         setPlaylistKey(currentKey);
     }, [edited]);
 
-    const onDeleteTrack = () => {
-
+    const onDeleteTrack = (ind) => {
+        setContent(content.filter((el, index) => (index !== ind)));
     };
 
     const onEditTrack = (ind) => {
@@ -54,7 +57,11 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
         setContent(changedContent);
     };
 
-    const onCancel = () => setEdited(false);
+    const onCancel = () => {
+        setEdited(false);
+        setShowJson(false);
+        setEditTitle(false);
+    };
 
     const onSave = () => {
         const playlistKey = edited['key'];
@@ -63,52 +70,80 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
     };
 
     const onExportToJson = () => {
-        const json = JSON.stringify(content);
-        console.log(json);
+        setShowJson(true);
     };
 
-    const onSaveTitle = (title) => {
-        if (playlistKey) {
+    const addPlaylist = (data, key, title) => {
+        const element = {key, title};
+        lf.setItem(LIST_KEY, [...data, element]).then(() => {
+                setPlaylistKey(key);
+                setLfLists([...data, element]);
+                setEdited(element);
+            }
+        );
+    };
 
-        } else {
-            const key = getNewKey();
-            const newPlaylist = {key, title};
-            lf.getItem(LIST_KEY).then(lfdata => {
-                const data = lfdata ? lfdata : [];
-                lf.setItem(LIST_KEY, [...data, {key, title}]);
-            });
-            setLfLists([...lfLists, newPlaylist]);
-            setTitle(title);
-            setPlaylistKey(key);
-            setEdited(newPlaylist);
+    const renamePlaylist = (data, key, title) => {
+        const el = data.find(el => el.key === playlistKey);
+        if (el) {
+            el['title'] = title;
+            lf.setItem(LIST_KEY, [...data]);
+            setLfLists([...data]);
+            setEdited(null);
         }
     };
 
+    const onSaveTitle = (title) => {
+        const key = (playlistKey) ? playlistKey : getNewKey();
+        lf.getItem(LIST_KEY).then(lfdata => {
+            const data = lfdata ? [...lfdata] : [];
+            if (playlistKey) {
+                renamePlaylist(data, key, title);
+            } else {
+                addPlaylist(data, key, title);
+            }
+        });
+        setTitle(title);
+        setEditTitle(false);
+    };
+
+    const onChangeName = () => {
+        setEditTitle(true);
+    };
 
     return (
-        <>
-
-            {playlistKey ?
-                <>
-                    <IconButton onClick={onCreateTrack} title={'добавить трек'}><Add/></IconButton>
-                    <IconButton onClick={onExportToJson} title={'экспорт в JSON'}><MUIIcon
-                        icon={'Storage'}/></IconButton>
-                    <MUITable data={content} size={'small'} TracksLimit={5} columns={['title', 'link']}
-                              tableTitle={'Содержимое плейлиста "' + title + '"'}
-                              hoverField={'title'} actions={getTableActions(onDeleteTrack, onEditTrack)}/>
-                </>
-                :
-                <LfNameForm title={title} onSaveTitle={onSaveTitle} change={!!playlistKey}/>
-            }
-            {track && <LfForm track={track} setTrack={setTrack} onSaveTrack={onSaveTrack}/>}
-            <ButtonGroup style={{marginTop: '10px'}}>
-                <Button onClick={onCancel} title='вернуться к списку без сохранения текущего плейлиста'>
-                    назад к списку плейлистов
-                </Button>
-                <Button onClick={onSave} title='сохрвнмть м вернуться к списку'>
-                    сохранить текущий плейлист
-                </Button>
-            </ButtonGroup>
-        </>
+        showJson ?
+            <JsonViewer content={content} setShowJson={setShowJson}/>
+            :
+            <>
+                {!playlistKey || editTitle ?
+                    <LfNameForm title={title} onSaveTitle={onSaveTitle} change={!!playlistKey}/> :
+                    <>
+                        <IconButton onClick={onCreateTrack} title={'добавить трек'}><Add/></IconButton>
+                        <IconButton onClick={onChangeName} title={'изменить название плейлиста'}>
+                            <MUIIcon icon={'Edit'}/>
+                        </IconButton>
+                        <IconButton onClick={onExportToJson} title={'вывести в формате в JSON'}>
+                            <MUIIcon icon={'Storage'}/>
+                        </IconButton>
+                        <MUITable data={content} size={'small'} TracksLimit={5} columns={['title', 'link']}
+                                  tableTitle={'Содержимое плейлиста "' + title + '"'}
+                                  hoverField={'title'} actions={getTableActions(onDeleteTrack, onEditTrack)}/>
+                    </>
+                }
+                {track && <LfForm track={track} setTrack={setTrack} onSaveTrack={onSaveTrack}/>}
+                <ButtonGroup style={{marginTop: '10px'}}>
+                    <Button onClick={onCancel} title='вернуться к списку без сохранения текущего плейлиста'>
+                        назад к списку плейлистов
+                    </Button>
+                    <Button onClick={onSave} title='сохрвнмть м вернуться к списку' color={'primary'} variant={'contained'}>
+                        !!! сохранить текущий плейлист !!!
+                    </Button>
+                </ButtonGroup>
+                <Divider style={{margin: '10px 0'}}/>
+                <Typography variant={'caption'}>После изменения состава плейлиста, нужно воспользоваться кнопкой
+                    "Сохранить
+                    текущий плейлист" для сохранения списка в IndexedDB</Typography>
+            </>
     );
 };

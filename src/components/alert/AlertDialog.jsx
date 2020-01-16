@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, DialogActions, DialogContent, DialogContentText, DialogTitle, Dialog} from '@material-ui/core';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 
 const AlertDialog = ({alertIsOpen, setAlertIsOpen, message = '', callback = null}) => {
 
@@ -24,10 +24,11 @@ const AlertDialog = ({alertIsOpen, setAlertIsOpen, message = '', callback = null
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onAlertClose} color='primary' title='Не выполнять действие' autoFocus>
+                <Button onClick={onAlertClose} color='primary' variant={'contained'} title='Не выполнять действие'
+                        autoFocus>
                     Отказаться от выполнения
                 </Button>
-                <Button onClick={onAlertAction} color='primary' title='Внимание! Указанное действие будет выполнено!' >
+                <Button onClick={onAlertAction} color='primary' title='Внимание! Указанное действие будет выполнено!'>
                     Выполнить действие
                 </Button>
             </DialogActions>
