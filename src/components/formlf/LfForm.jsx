@@ -21,6 +21,9 @@ const useStyles = makeStyles({
         backgroundColor: MDB_COLOR,
         color: 'white',
         padding: '24px'
+    },
+    buttonGroup: {
+        marginTop: '10px'
     }
 });
 
@@ -60,7 +63,7 @@ const LfForm = ({track = null, setTrack, onSaveTrack}) => {
                 Ссылку нужного формата можно получить через функцию ПОДЕЛИТЬСЯ на youtube
             </Typography>
 
-            <ButtonGroup>
+            <ButtonGroup className={classes.buttonGroup}>
                 <Button type='submit' color='secondary' variant='contained' fullWidth title='сохранить и закрыть'>
                     сохранить
                 </Button>

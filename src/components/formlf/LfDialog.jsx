@@ -2,12 +2,20 @@ import React, {useEffect, useState} from 'react';
 import * as PropTypes from 'prop-types';
 import {localforage as lf} from '../../localforage';
 import {
-    Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Typography
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Divider,
+    IconButton,
+    Typography
 } from '@material-ui/core';
 
 import MUITable from '../table/MUITable';
 import {getTableActions} from '../../functions';
-import AlertDialog from '../alert/alert';
+import AlertDialog from '../alert/AlertDialog';
 import {LfPlaylistEditor} from './LfPlaylistEditor';
 import {LIST_KEY} from '../../constants';
 import {Add} from '@material-ui/icons';
@@ -63,45 +71,53 @@ const LfDialog = ({isLfOpen = false, setIsLfOpen, lists, setLists}) => {
 
     return (
         <>
-            <Dialog open={isLfOpen} onClose={onClose} aria-labelledby='form-dialog-title' fullScreen={true}>
-                <DialogTitle id='form-dialog-title'>Редактирование локального списка плейлистов</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        <Typography variant='caption'>
-                            Модифицируемый и сохраняемый в IndexedDB список плейлистов
-                        </Typography>
-                    </DialogContentText>
-                    <Divider/>
+            <Dialog open={isLfOpen} onClose={onClose} aria-labelledby='form-dialog-title' fullScreen={true}
+                    style={{textAlign: 'center'}}>
+                <div style={{
+                    width: '100%', maxWidth: '740px', margin: '0 auto',
+                    display: 'flex', flexDirection: 'column', flexGrow: 1
+                }}>
 
-                    {edited ?
-                        <LfPlaylistEditor lfLists={lfLists} setLfLists={setLfLists}
-                                          edited={edited} setEdited={setEdited}/>
-                        :
-                        <>
-                            <IconButton onClick={onCreate} title={'добавить плейлист'}><Add/></IconButton>
-                            <MUITable data={lfLists} size={'small'} rowsLimit={5} columns={['title', 'key']}
-                                      tableTitle={'Список плейлистов'}
-                                      hoverField={'title'} actions={getTableActions(onDelete, onEdit)}
-                                      showForm={showForm} setShowForm={setShowForm}/>
-                        </>
-                    }
+                    <DialogTitle id='form-dialog-title'>Редактирование локального списка плейлистов</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            <Typography variant='caption'>
+                                Модифицируемый и сохраняемый в IndexedDB список плейлистов
+                            </Typography>
+                        </DialogContentText>
+                        <Divider/>
 
-                </DialogContent>
 
-                <DialogActions>
-                    <Button onClick={onClose} color='primary' variant='contained'
-                            title={'Закрыть'}>
-                        Закрыть список
-                    </Button>
-                    <Button onClick={onClear} variant='contained'
-                            title={'Очистить локальный список плейлистов в IndexedDB'}>
-                        Очистить список плейлистов
-                    </Button>
+                        {edited ?
+                            <LfPlaylistEditor lfLists={lfLists} setLfLists={setLfLists}
+                                              edited={edited} setEdited={setEdited}/>
+                            :
+                            <>
+                                <IconButton onClick={onCreate} title={'добавить плейлист'}><Add/></IconButton>
+                                <MUITable data={lfLists} size={'small'} rowsLimit={5} columns={['title', 'key']}
+                                          tableTitle={'Список плейлистов'}
+                                          hoverField={'title'} actions={getTableActions(onDelete, onEdit)}
+                                          showForm={showForm} setShowForm={setShowForm}/>
+                            </>
+                        }
 
-                </DialogActions>
+                    </DialogContent>
+
+                    <DialogActions style={{marginTop: 'auto'}}>
+                        <Button onClick={onClose} color='primary' variant='contained'
+                                title={'Закрыть'}>
+                            Закрыть список
+                        </Button>
+                        <Button onClick={onClear} variant='contained'
+                                title={'Очистить локальный список плейлистов в IndexedDB'}>
+                            Очистить список плейлистов
+                        </Button>
+
+                    </DialogActions>
+                </div>
             </Dialog>
 
-            <AlertDialog message={'очистить полностью IndexedDB со списком локальных плейлистов'}
+            <AlertDialog message={'полностью очистить IndexedDB со списком локальных плейлистов'}
                          alertIsOpen={alertIsOpen} setAlertIsOpen={setAlerIstOpen} callback={lfClear}/>
         </>
     );
