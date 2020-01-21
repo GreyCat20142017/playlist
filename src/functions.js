@@ -27,7 +27,8 @@ export const getPlaylists = (lists) => (
     lists.map((item, ind) => ({
         key: ind,
         href: ind,
-        text: item['title']
+        text: item['title'],
+        type: item['type']
     })));
 
 export const getTextForm = (sourceNumber, textForms) => {

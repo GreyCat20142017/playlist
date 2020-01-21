@@ -3,29 +3,8 @@ import {useForm} from 'react-hook-form';
 import * as PropTypes from 'prop-types';
 import {Button, TextField, Typography} from '@material-ui/core';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import {MDB_COLOR} from '../../theme';
-import {makeStyles} from '@material-ui/core/styles';
 import {extractYoutubeId, isMaybeYoutubeId, isValidUrl, isYoutubeUrl} from '../../functions';
-
-const useStyles = makeStyles({
-    textField: {
-        color: 'white',
-        '&  input': {
-            color: 'white'
-        },
-        '& label': {
-            color: 'white'
-        }
-    },
-    lfForm: {
-        backgroundColor: MDB_COLOR,
-        color: 'white',
-        padding: '24px'
-    },
-    buttonGroup: {
-        marginTop: '10px'
-    }
-});
+import {useStyles} from './LfForm.css';
 
 const isError = (errors, fieldName) => (errors && errors[fieldName]);
 
@@ -51,10 +30,10 @@ const LfForm = ({track = null, setTrack, onSaveTrack}) => {
             </Typography>
             <TextField className={classes.textField} defaultValue={track ? track['title'] || '' : ''} variant='filled'
                        name='title' inputRef={register({required: true})} error={!!isError(errors, 'title')}
-                       margin='dense' id='title' label='Название трека' type='text' fullWidth/>
+                       margin='dense' id='title' label='Название трека' type='text' fullWidth autoFocus/>
             <TextField className={classes.textField} defaultValue={track ? track['link'] || '' : ''} variant='filled'
                        name='link' inputRef={register({required: true})} error={!!isError(errors, 'link')}
-                       autoFocus margin='dense' id='link' label='Ссылка youtube' type='text' fullWidth/>
+                       margin='dense' id='link' label='Ссылка youtube' type='text' fullWidth/>
 
             <Typography variant='caption' component='p' color={error ? 'error' : 'inherit'}>
                 Ссылка на видео yotube должна быть в формате https://youtu.be/ID

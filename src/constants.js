@@ -1,20 +1,18 @@
 const url = window.location.origin;
 export const APP_ROOT = ((url.match(/github\.io/gi)) ? '/playlist/' : '');
 
+export const PLAYLIST_TYPE = {DEFAULT: 'DEFAULT', JSON: 'JSON', LF: 'LF'};
+
 export const PLAYLISTS = [
     {
         'title': 'Santiano',
         'href': APP_ROOT + 'data/playlistSantiano.json',
-        'fromJson': true,
-        'content': null,
-        'default': true
+        'type': PLAYLIST_TYPE.DEFAULT,
     },
     {
         'title': 'Zaz',
         'href': APP_ROOT + 'data/playlistZaz.json',
-        'fromJson': true,
-        'content' : null,
-        'default': true
+        'type': PLAYLIST_TYPE.DEFAULT,
     }
 ];
 

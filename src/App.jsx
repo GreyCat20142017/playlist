@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {ThemeProvider} from '@material-ui/styles';
 import {Container, CssBaseline, Paper, Typography} from '@material-ui/core';
@@ -16,10 +16,11 @@ import {theme} from './theme';
 import {useStyles} from './App.css.js';
 import Comment from './components/comment/Comment';
 import Submenu from './components/submenu/Submenu';
-import LfDialog from './components/formlf/LfDialog';
+import LfDialogContainer from './components/formlf/LfDialogContainer';
+import {useDB} from './hooks/customHooks';
 
 const App = () => {
-    const [lists, setLists] = useState(getLocalPlaylists());
+    const [lists, setLists] = useState([]);
     const [playlist, setPlaylist] = useState(null);
     const [content, setContent] = useState([]);
     const [playerActive, setPlayerActive] = useState(false);
@@ -27,7 +28,13 @@ const App = () => {
     const [isLfOpen, setIsLfOpen] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isStepperSubmenu, setIsStepperSubmenu] = useState(null);
+    const [lfData] = useDB();
+
     const classes = useStyles();
+
+    useEffect(() => {
+        setLists([...getLocalPlaylists(), ...lfData]);
+    }, [lfData]);
 
     const changePlaylist = (key) => {
         const ind = parseInt(key);
@@ -71,8 +78,9 @@ const App = () => {
                 <Footer classes={classes} setIsDrawerOpen={setIsDrawerOpen}
                         setIsFormOpen={setIsFormOpen} setIsLfOpen={setIsLfOpen}/>
 
-                <FormDialog isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} lists={lists} setLists={setLists}/>
-                <LfDialog isLfOpen={isLfOpen} setIsLfOpen={setIsLfOpen} lists={lists} setLists={setLists}/>
+                {isFormOpen && <FormDialog isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} lists={lists} setLists={setLists}/>}
+                {isLfOpen && <LfDialogContainer isLfOpen={isLfOpen} setIsLfOpen={setIsLfOpen} lists={lists} setLists={setLists}/>}
+
             </Container>
         </ThemeProvider>
     );

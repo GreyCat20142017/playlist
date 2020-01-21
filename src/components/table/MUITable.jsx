@@ -1,7 +1,15 @@
 import React, {useState} from 'react';
 import * as PropTypes from 'prop-types';
 import {
-    Paper, Table, TableBody, TableCell, TableHead, TablePagination, TableRow, Typography, makeStyles
+    makeStyles,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TablePagination,
+    TableRow,
+    Typography
 } from '@material-ui/core';
 
 import {theme} from '../../theme';
@@ -25,6 +33,17 @@ const useStyles = () => makeStyles({
     }
 });
 
+const getDisabled = (data, rowInd, actionsDisable) => {
+   const result = {disabledActions: [], disabledCondition: false};
+   if (data && actionsDisable && actionsDisable['disabledCondition']) {
+       const fieldName = actionsDisable.disabledCondition['fieldName'];
+       const fieldCondition = actionsDisable.disabledCondition['condition'];
+       const fieldValue = data[rowInd][fieldName];
+        result.disabledCondition = fieldName && fieldValue && fieldCondition ? (fieldValue === fieldCondition) : false;
+        result.disabledActions = [...actionsDisable['disabledActions']];
+   }
+   return result;
+};
 
 const getCell = (row, column, rowIndex) => (row[column] || (column === 'id' ? rowIndex + 1 : ''));
 
@@ -39,7 +58,7 @@ const getHoverTitle = (row, hoverField) => (
 const MUITable = ({
                       data, columns, rowsLimit = 10, size = 'small', maxWidth = '100%',
                       hoverField = null, actions = null,
-                      tableTitle = null
+                      tableTitle = null, actionsDisable = null
                   }) => {
     const classes = useStyles(maxWidth);
     const [page, setPage] = useState(0);
@@ -82,7 +101,9 @@ const MUITable = ({
                                                 </TableCell>
                                             )
                                         )}
-                                        <ActionsCells actions={actions} rowInd={rowInd + rowsPerPage * page}/>
+                                        {actions &&  <ActionsCells actions={actions} rowInd={rowInd + rowsPerPage * page}
+                                                                   {...getDisabled(data, rowInd, actionsDisable)}
+                                        />}
                                     </TableRow>
                                 ))
                             }

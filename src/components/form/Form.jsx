@@ -3,12 +3,13 @@ import * as PropTypes from 'prop-types';
 import {Button, Divider, TextField, Typography} from '@material-ui/core';
 
 import {isValidUrl} from '../../functions';
+import {PLAYLIST_TYPE} from '../../constants';
 
 const isFormValid = (err) => (!err || !(err['href'] || err['title']));
 
 const isError = (errors, fieldName) => (errors && errors[fieldName]);
 
-const fromJson  = true;
+// const currentType = PLAYLIST_TYPE.JSON;
 
 const Form = ({lists, setLists, edited = null, setEdited}) => {
     const [title, setTitle] = useState('');
@@ -48,14 +49,14 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
             [...lists, {
                 title,
                 href,
-                fromJson: fromJson,
-                content: fromJson ? null : []
+                type: PLAYLIST_TYPE.JSON
+
             }];
         setLists(newList);
     };
 
     const formValidate = () => {
-        const hrefError = fromJson && ((href.trim() === '') || !isValidUrl(href)) ? 'Ссылка должна быть заполнена и быть корректной.' : null;
+        const hrefError = ((href.trim() === '') || !isValidUrl(href)) ? 'Ссылка должна быть заполнена и быть корректной.' : null;
         const titleError = (title.trim() === '') ? 'Название должно быть заполнено' : null;
         setErrors({
             title: titleError,
@@ -83,7 +84,7 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
 
             <TextField value={href} onChange={onChangeHref} error={!!isError(errors, 'href')}
                        autoFocus margin='dense' id='href' label='Ссылка на файл плейлиста' type='text'
-                       fullWidth disabled={!fromJson}/>
+                       fullWidth/>
 
             <Button onClick={resetState} title={'Отмена незавершенного действия'}>Отмена</Button>
             <Button type='submit' style={{margin: '10px auto'}} variant='contained' color='primary' size='small'

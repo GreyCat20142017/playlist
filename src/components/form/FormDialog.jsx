@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import * as PropTypes from 'prop-types';
-import {localforage as lf} from '../../localforage';
+import axios from 'axios';
 import {
-    Button, Divider, Typography, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+    Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Typography
 } from '@material-ui/core';
 import {Add} from '@material-ui/icons';
 
-import MUITable from '../table/MUITable';
 import Form from './Form';
+import MUITable from '../table/MUITable';
 import {getClearData, getFilteredData, getNewKey, getTableActions, setLocalPlaylists} from '../../functions';
-import axios from 'axios';
-import {LIST_KEY} from '../../constants';
+import {PLAYLIST_TYPE} from '../../constants';
+import {useDB} from '../../hooks/customHooks';
 
 const getContent = async (href) => {
     const res = await axios.get(href);
@@ -21,13 +21,19 @@ const getContent = async (href) => {
     }
 };
 
+const actionsDisable = {
+    disabledActions: ['edit', 'delete'], disabledCondition: {fieldName: 'type', condition: PLAYLIST_TYPE.DEFAULT}
+};
+
 const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
     const [status, setStatus] = useState(null);
     const [edited, setEdited] = useState(null);
     const [jsonLists, setJsonLists] = useState([]);
 
+    const [, {exportToLf}] = useDB(false);
+
     useEffect(() => {
-        setJsonLists(lists.filter(list => list.fromJson));
+        setJsonLists(lists.filter(list => list.type !== PLAYLIST_TYPE.LF));
     }, [lists, setJsonLists]);
 
     const onSave = () => {
@@ -55,22 +61,16 @@ const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
     };
 
     const onCreate = () => {
-        setEdited({ title: '', fromJson: true, 'index': -1});
+        setEdited({title: '', type: PLAYLIST_TYPE.JSON, 'index': -1});
     };
 
     const onExport = async (ind) => {
         const title = lists[ind]['title'];
         const content = await getContent(lists[ind]['href']);
         const key = getNewKey();
-        lf.getItem(LIST_KEY).then(lfdata => {
-            const data = lfdata ? lfdata : [];
-            lf.setItem(LIST_KEY, [...data, {key, title}]).then(() => {
-                    setLists([...lists, {title, fromJson: false}]);
-                    lf.setItem(key, content);
-                }
-            );
-        });
+        exportToLf(key, title, content, lists, setLists);
     };
+
 
     return (
         <Dialog open={isFormOpen} onClose={onClose} aria-labelledby='form-dialog-title'>
@@ -93,8 +93,10 @@ const FormDialog = ({isFormOpen = false, setIsFormOpen, lists, setLists}) => {
                     :
                     <>
                         <IconButton onClick={onCreate} title={'добавить'}><Add/></IconButton>
-                        <MUITable data={jsonLists ? jsonLists : []} size={'small'} rowsLimit={5} columns={['title']}
-                                  hoverField={'href'} actions={getTableActions(onDelete, onEdit, onExport)}/>
+                        <MUITable data={jsonLists ? jsonLists : []} size={'small'} rowsLimit={5}
+                                  columns={['title', 'type']}
+                                  hoverField={'href'} actions={getTableActions(onDelete, onEdit, onExport)}
+                                  actionsDisable={actionsDisable}/>
                     </>}
             </DialogContent>
 

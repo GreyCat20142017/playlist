@@ -8,10 +8,11 @@ import MUITable from '../table/MUITable';
 import MUIIcon from '../icon/MUIIcon';
 import LfNameForm from './LfNameForm';
 import {JsonViewer} from './JsonViewer';
-import {LIST_KEY} from '../../constants';
+import {LIST_KEY, PLAYLIST_TYPE} from '../../constants';
 import {getNewKey, getTableActions, isValidIndex} from '../../functions';
+import {useDB} from '../../hooks/customHooks';
 
-export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
+export const LfPlaylistEditor = ({setLfLists, edited, setEdited}) => {
     const [content, setContent] = useState([]);
     const [title, setTitle] = useState('');
     const [track, setTrack] = useState('');
@@ -19,18 +20,16 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
     const [showJson, setShowJson] = useState(false);
     const [editTitle, setEditTitle] = useState(false);
 
+    const [lfData, {getPlaylistContent}]  = useDB();
+
     useEffect(() => {
-        const currentKey = edited['key'];
+        const currentKey = edited['href'];
         if (currentKey) {
-            lf.getItem(currentKey).then(el => {
-                if (el && Array.isArray(el)) {
-                    setContent([...el]);
-                    setTitle(edited['title']);
-                }
-            });
+          getPlaylistContent(currentKey, setContent);
         }
+        setTitle(edited['title']);
         setPlaylistKey(currentKey);
-    }, [edited]);
+    }, [edited, getPlaylistContent]);
 
     const onDeleteTrack = (ind) => {
         setContent(content.filter((el, index) => (index !== ind)));
@@ -64,9 +63,10 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
     };
 
     const onSave = () => {
-        const playlistKey = edited['key'];
+        const playlistKey = edited['href'];
         setEdited(false);
         lf.setItem(playlistKey, [...content]).then().catch();
+        setEditTitle(false);
     };
 
     const onExportToJson = () => {
@@ -74,7 +74,7 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
     };
 
     const addPlaylist = (data, key, title) => {
-        const element = {key, title};
+        const element = {key, title, href: key, type: PLAYLIST_TYPE.LF};
         lf.setItem(LIST_KEY, [...data, element]).then(() => {
                 setPlaylistKey(key);
                 setLfLists([...data, element]);
@@ -84,25 +84,24 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
     };
 
     const renamePlaylist = (data, key, title) => {
-        const el = data.find(el => el.key === playlistKey);
+        const el = data.find(el => el.href === playlistKey);
         if (el) {
             el['title'] = title;
-            lf.setItem(LIST_KEY, [...data]);
-            setLfLists([...data]);
-            setEdited(null);
+            lf.setItem(LIST_KEY, [...data]).then(() => {
+                setLfLists([...data]);
+                setEdited(null);
+                setEditTitle(false);
+            })
         }
     };
 
     const onSaveTitle = (title) => {
         const key = (playlistKey) ? playlistKey : getNewKey();
-        lf.getItem(LIST_KEY).then(lfdata => {
-            const data = lfdata ? [...lfdata] : [];
-            if (playlistKey) {
-                renamePlaylist(data, key, title);
-            } else {
-                addPlaylist(data, key, title);
-            }
-        });
+        if (playlistKey) {
+          renamePlaylist(lfData, key, title);
+         } else {
+           addPlaylist(lfData, key, title);
+         };
         setTitle(title);
         setEditTitle(false);
     };
@@ -123,7 +122,7 @@ export const LfPlaylistEditor = ({lfLists, setLfLists, edited, setEdited}) => {
                         <IconButton onClick={onChangeName} title={'изменить название плейлиста'}>
                             <MUIIcon icon={'Edit'}/>
                         </IconButton>
-                        <IconButton onClick={onExportToJson} title={'вывести в формате в JSON'}>
+                        <IconButton onClick={onExportToJson} title={'вывести в формате JSON'}>
                             <MUIIcon icon={'Storage'}/>
                         </IconButton>
                         <MUITable data={content} size={'small'} TracksLimit={5} columns={['title', 'link']}
