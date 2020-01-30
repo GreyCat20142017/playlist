@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import * as PropTypes from 'prop-types';
 import {Button, TextField, Typography} from '@material-ui/core';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import {extractYoutubeId, isMaybeYoutubeId, isValidUrl, isYoutubeUrl} from '../../functions';
-import {useStyles} from './LfForm.css';
+import {useStyles} from './playlistform.css';
 
 const isError = (errors, fieldName) => (errors && errors[fieldName]);
 
@@ -42,23 +41,16 @@ const LfForm = ({track = null, setTrack, onSaveTrack}) => {
                 Ссылку нужного формата можно получить через функцию ПОДЕЛИТЬСЯ на youtube
             </Typography>
 
-            <ButtonGroup className={classes.buttonGroup}>
-                <Button type='submit' color='secondary' variant='contained' fullWidth title='сохранить и закрыть'>
+            <ButtonGroup className={classes.buttonGroup}>                <Button type='submit' color='secondary' variant='contained'  title='сохранить и закрыть'>
                     сохранить
                 </Button>
-                <Button color='secondary' variant='contained' fullWidth title=' закрыть'
+                <Button color='secondary' variant='contained'  title=' закрыть'
                         onClick={() => setTrack(null)}>
                     отмена
                 </Button>
             </ButtonGroup>
         </form>
     );
-};
-
-LfForm.propTypes = {
-    track: PropTypes.object || null,
-    setTrack: PropTypes.func.isRequired,
-    onSaveTrack: PropTypes.func.isRequired
 };
 
 export default LfForm;

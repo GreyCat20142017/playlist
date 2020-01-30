@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import * as PropTypes from 'prop-types';
 import {Fab, Menu, MenuItem} from '@material-ui/core';
 
-import MUIIcon from '../icon/MUIIcon';
+import {MUIIcon} from '../components';
 import {useStyles} from '../../App.css';
 
-const Submenu = ({
+export const Submenu = ({
                      submenuItems = [], callback = null,
                      switchIcon = 'More', text = '', prompt = 'выбор', anchor = null, showButton = true, showSubmenu = null
                  }) => {
@@ -65,16 +64,3 @@ const Submenu = ({
         </>
     );
 };
-
-Submenu.propTypes = {
-    submenuItems: PropTypes.array,
-    callback: PropTypes.func,
-    switchIcon: PropTypes.string,
-    text: PropTypes.string,
-    prompt: PropTypes.string,
-    anchor: PropTypes.oneOfType([PropTypes.element, PropTypes.object]),
-    showButton: PropTypes.bool,
-    showSubmenu: PropTypes.func
-};
-
-export default Submenu;

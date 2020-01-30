@@ -30,7 +30,9 @@ export const useDB = (needGet = true) => {
         lf.removeItem(key).then(() => {
             lf.getItem(LIST_KEY).then(lfdata => {
                 const data = lfdata ? lfdata : [];
-                lf.setItem(LIST_KEY, data.filter(el => el.key !== key)).then(
+                lf.setItem(LIST_KEY, data.filter(el =>
+                    el.href !== key && typeof el.href !== 'undefined' && el.type === PLAYLIST_TYPE.LF
+                )).then(
                     () => setLists(lists.filter(el => el.href !== key))
                 );
             });
@@ -54,13 +56,14 @@ export const useDB = (needGet = true) => {
         lf.clear().then(() => setLists(lists.filter(el => el.type !== PLAYLIST_TYPE.LF)));
     }, []);
 
-    const getPlaylistContent = useCallback((key, setContent) => {
-        lf.getItem(key).then(el => {
-            if (el && Array.isArray(el)) {
-                setContent([...el]);
-            }
-        });
+    const getDbContent = useCallback(async (key, setContent) => {
+        const el = await lf.getItem(key) || [];
+        if (setContent) {
+            setContent(el);
+        }
+        return el;
     }, []);
 
-    return [data, {resetData, deletePlaylist, getPlaylistContent, exportToLf, clearStorage}];
+
+    return [data, {resetData, deletePlaylist, exportToLf, clearStorage, getDbContent}];
 };

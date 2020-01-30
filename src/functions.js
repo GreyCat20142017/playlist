@@ -1,4 +1,4 @@
-import {LOCAL_STORAGE, LONG, PLAYLISTS, SHORT, YOUTUBE_ID_LENGTH} from './constants';
+import {LOCAL_STORAGE, LONG, PLAYLIST_TYPE, PLAYLISTS, SHORT, YOUTUBE_ID_LENGTH} from './constants';
 
 const isLong = (url) => {
     return (url.indexOf(LONG) !== -1);
@@ -64,7 +64,7 @@ export const getLocalPlaylists = () => {
 export const setLocalPlaylists = (lists) => {
     let result = null;
     try {
-        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(lists.filter(list => !list['default'])));
+        localStorage.setItem(LOCAL_STORAGE, JSON.stringify(lists.filter(list => list['type'] === PLAYLIST_TYPE.JSON)));
     } catch (err) {
         result = err.message;
     }
@@ -90,7 +90,7 @@ export const getTableActions = (onDelete = null, onEdit = null, onExport = null)
         actions['edit'] = {'title': 'изменить', icon: 'Edit', onCallback: onEdit};
     }
     if (onExport) {
-        actions['export'] = {'title': 'экспорт в LocalForage', icon: 'Storage', onCallback: onExport};
+        actions['export'] = {'title': 'экспорт в IndexedDB', icon: 'Storage', onCallback: onExport};
     }
     return actions;
 };
@@ -102,7 +102,5 @@ export const isValidIndex = (index, testedArray) => (((index >= 0) && (index < t
 export const getActiveStep = (playlist, playerActive) => (
     playerActive && playlist ? 2 : playlist ? 1 : 0
 );
-
-export const isError = (errors, fieldName) => (errors && errors[fieldName]);
 
 export const getNewKey = () => ('id-' + (+new Date()));

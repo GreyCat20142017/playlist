@@ -1,10 +1,10 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
+
 import {useStyles} from './Player.css.js';
 import {YOUTUBE_EMBED} from '../../constants';
 import {isData} from '../../functions';
 
-const Player = ({data = null, playerActive = false}) => {
+export const Player = ({data = null, playerActive = false}) => {
     const classes = useStyles();
     const enablePlayer = playerActive && isData(data);
     const ids = data.map(item => item['link']);
@@ -21,10 +21,3 @@ const Player = ({data = null, playerActive = false}) => {
         </>
     );
 };
-
-
-Player.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object) || null,
-    playerActive: PropTypes.bool
-};
-export default Player;

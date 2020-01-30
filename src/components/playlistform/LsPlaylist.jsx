@@ -1,21 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import * as PropTypes from 'prop-types';
 import {Button, Divider, TextField, Typography} from '@material-ui/core';
 
-import {isValidUrl} from '../../functions';
+import {getNewKey, isValidUrl, setLocalPlaylists} from '../../functions';
 import {PLAYLIST_TYPE} from '../../constants';
+import {useStyles} from './playlistform.css';
 
 const isFormValid = (err) => (!err || !(err['href'] || err['title']));
 
 const isError = (errors, fieldName) => (errors && errors[fieldName]);
 
-// const currentType = PLAYLIST_TYPE.JSON;
 
-const Form = ({lists, setLists, edited = null, setEdited}) => {
+const LsPlaylist = ({lists, setLists, edited = null, setEdited}) => {
     const [title, setTitle] = useState('');
     const [href, setHref] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState(null);
+    const classes = useStyles();
 
     useEffect(() => {
         if (isFormValid(errors) && isSubmitting) {
@@ -49,10 +49,12 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
             [...lists, {
                 title,
                 href,
-                type: PLAYLIST_TYPE.JSON
+                type: PLAYLIST_TYPE.JSON,
+                key: getNewKey()
 
             }];
         setLists(newList);
+        setLocalPlaylists(newList);
     };
 
     const formValidate = () => {
@@ -78,7 +80,14 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
 
     return (
 
-        <form onSubmit={onFormSubmit}>
+        <form className={classes.lsForm} onSubmit={onFormSubmit}>
+            <Typography variant={'caption'}>
+                Для дополнения списка плейлистов нужно добавить название плейлиста и ссылку на описание
+                плейлиста (https://ИмяРесурса или data/Файл.json)
+                Содержимое файла с описанием плейлиста представляет собой массив объектов с полями 'title' и
+                'link' в формате json.
+                Поле 'link' - ссылка на видео youtube, полученная через функцию 'ПОДЕЛИТЬСЯ'
+            </Typography>
             <TextField value={title} onChange={onChangeTitle} error={!!isError(errors, 'title')}
                        autoFocus margin='dense' id='title' label='Название плейлиста' type='text' fullWidth/>
 
@@ -88,21 +97,13 @@ const Form = ({lists, setLists, edited = null, setEdited}) => {
 
             <Button onClick={resetState} title={'Отмена незавершенного действия'}>Отмена</Button>
             <Button type='submit' style={{margin: '10px auto'}} variant='contained' color='primary' size='small'
-                    onClick={onFormSubmit} title={'добавить в список (без сохранения в localStorage)'}>
-                {'сохранить элемент предварительно'}
+                    onClick={onFormSubmit} title={'Сохранить плейлист'}>
+                {'сохранить Json-плейлист'}
             </Button>
-            <Typography variant='caption' component={'p'}>!!! Для сохранение всего списка в localStoragе  - кнопка "Сохранить изменения..." !!! </Typography>
             <Divider/>
             <Typography variant={'caption'} color={'error'}>{errorMessage}</Typography>
         </form>
     );
 };
 
-Form.propTypes = {
-    lists: PropTypes.arrayOf(PropTypes.object).isRequired,
-    setLists: PropTypes.func.isRequired,
-    edited: PropTypes.object || null,
-    setEdited: PropTypes.func.isRequired
-};
-
-export default Form;
+export default LsPlaylist;

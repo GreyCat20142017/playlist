@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import * as PropTypes from 'prop-types';
 import axios from 'axios';
-import {getClearData, getFilteredData} from '../functions';
-import {PLAYLIST_TYPE} from '../constants';
-import {localforage as lf} from '../localforage';
+import {getClearData, getFilteredData} from '../../functions';
+import {PLAYLIST_TYPE} from '../../constants';
+import {localforage as lf} from '../../localforage';
 
-const PlayListContainer = ({playlist, setContent}) => {
+export const PlayListContainer = ({playlist, setContent}) => {
     const [error, setError] = useState(null);
 
 
@@ -42,11 +41,3 @@ const PlayListContainer = ({playlist, setContent}) => {
         </>
     );
 };
-
-PlayListContainer.propTypes = {
-    playlist: PropTypes.object,
-    setContent: PropTypes.func.isRequired
-}
-
-export default PlayListContainer;
-

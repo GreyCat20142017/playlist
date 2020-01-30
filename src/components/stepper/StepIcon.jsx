@@ -1,9 +1,10 @@
-import {useStepperStyles} from './PlayerStepper.css';
+import React from 'react';
+import clsx from 'clsx';
+
+import {MUIIcon} from '../components';
 import {isValidIndex} from '../../functions';
 import {PLAYER_STEPS_ICONS} from '../../constants';
-import clsx from 'clsx';
-import MUIIcon from '../icon/MUIIcon';
-import React from 'react';
+import {useStepperStyles} from './PlayerStepper.css';
 
 const StepIcon = ({active = false, completed = false, error = false, icon = 'PlayList'}) => {
     const classes = useStepperStyles();

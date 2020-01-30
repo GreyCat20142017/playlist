@@ -1,12 +1,11 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
 import {Typography} from '@material-ui/core';
 
-import MUITable from './table/MUITable';
-import {getTextForm} from '../functions';
-import {ROWS_LIMIT} from '../constants';
+import {MUITable} from '../components';
+import {getTextForm} from '../../functions';
+import {ROWS_LIMIT} from '../../constants';
 
-const PlayList = ({title, data}) => (
+export const PlayList = ({title, data}) => (
     <>
         <div style={{paddingTop: '20px'}}>
             <Typography style={{marginBottom: '10px'}} variant={'h6'}>
@@ -17,10 +16,3 @@ const PlayList = ({title, data}) => (
         </div>
     </>
 );
-
-PlayList.propTypes = {
-  title: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(PropTypes.object)
-};
-
-export default PlayList;

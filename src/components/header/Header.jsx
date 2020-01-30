@@ -1,14 +1,13 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 import {AppBar, Fab, Toolbar, Typography} from '@material-ui/core';
 
-import Submenu from '../submenu/Submenu';
-import MUIIcon from '../icon/MUIIcon';
+import {Submenu, MUIIcon} from '../components';
 import {getPlaylists} from '../../functions';
 import {MARGINAUTO} from '../../constants';
 
-const Header = ({classes, lists = [], callback, playlist, playerActive, switchPlayerActive}) => (
+export const Header = ({classes, lists = [], callback, playlist, playerActive, switchPlayerActive}) => (
     <AppBar position='static'>
         <Toolbar className={classes.spaceBetween}>
             <div className={classNames(classes.paperFlexFull, classes.fabParent)}>
@@ -25,20 +24,13 @@ const Header = ({classes, lists = [], callback, playlist, playerActive, switchPl
                     </Fab>
                     : null
                 }
-                <Typography style={MARGINAUTO} variant='h6'>playlist</Typography>
-                <MUIIcon icon={'Paw'} size={'large'}/>
+
+                <Link className={classNames(classes.link, classes.paperFlex)} to='/' style={MARGINAUTO}>
+                    <Typography style={{marginRight: '7px'}} variant='h6'>playlist</Typography>
+                    <MUIIcon icon={'Paw'} size={'large'}/>
+                </Link>
             </div>
         </Toolbar>
     </AppBar>
 );
 
-Header.propTypes = {
-    classes: PropTypes.object,
-    lists: PropTypes.arrayOf(PropTypes.object),
-    callback: PropTypes.func,
-    playlist: PropTypes.object || null,
-    onClick: PropTypes.func,
-    playerActive: PropTypes.bool
-};
-
-export default Header;

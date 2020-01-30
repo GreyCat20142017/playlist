@@ -9,15 +9,16 @@ const selectContent = (node) => {
     contentSelection.addRange(contentRange);
 };
 
-export const JsonViewer = ({content, setShowJson}) => {
+export const JsonViewer = ({content, setShowJson, title}) => {
     const ref = useRef();
 
     useEffect(() => {
-      selectContent(ref.current)
+        selectContent(ref.current);
     }, []);
 
     return (
         <>
+            <Typography variant={'subtitle1'} color={'error'}>Редактируемый плейлист: "{title}"</Typography>
             <Typography ref={ref} variant={'caption'} color={'secondary'}>
                 {JSON.stringify(content)}
             </Typography>

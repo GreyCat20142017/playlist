@@ -1,16 +1,14 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
 import {Stepper, Step, StepLabel} from '@material-ui/core';
 
 import StepIcon from './StepIcon';
 import {PLAYER_STEPS} from '../../constants';
 import {useStepperStyles} from './PlayerStepper.css';
 
-const PlayerStepper = ({
+export const PlayerStepper = ({
                            steps = PLAYER_STEPS, activeStep,
                            playlist = null, setPlaylist, setPlayerActive, showSubmenu
                        }) => {
-
 
     const classes = useStepperStyles();
 
@@ -41,14 +39,3 @@ const PlayerStepper = ({
         </div>
     );
 };
-
-PlayerStepper.propTypes = {
-    steps: PropTypes.arrayOf(PropTypes.string),
-    activeStep: PropTypes.number.isRequired,
-    playlist: PropTypes.object,
-    setPlaylist: PropTypes.func.isRequired,
-    setPlayerActive: PropTypes.func.isRequired,
-    showSubmenu: PropTypes.func.isRequired
-};
-
-export default PlayerStepper;

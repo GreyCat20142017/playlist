@@ -1,21 +1,21 @@
 import React from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 
-const AlertDialog = ({alertIsOpen, setAlertIsOpen, message = '', callback = null}) => {
+export const AlertDialog = ({alert, setAlert, message = '', callback = null}) => {
 
     const onAlertClose = () => {
-        setAlertIsOpen(false);
+        setAlert(false);
     };
 
     const onAlertAction = () => {
-        setAlertIsOpen(false);
+        setAlert(false);
         if (callback) {
             callback();
         }
     };
 
     return (
-        <Dialog open={alertIsOpen} onClose={onAlertClose}
+        <Dialog open={!!alert} onClose={onAlertClose}
                 aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
             <DialogTitle id='alert-dialog-title'>{'ВНИМАНИЕ !'}</DialogTitle>
             <DialogContent>
@@ -35,5 +35,3 @@ const AlertDialog = ({alertIsOpen, setAlertIsOpen, message = '', callback = null
         </Dialog>
     );
 };
-
-export default AlertDialog;

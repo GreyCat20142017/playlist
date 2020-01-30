@@ -82,7 +82,7 @@ export const useStyles = makeStyles({
             width: '100%'
         },
        ml: {
-            marginLeft: theme.spacing(1),
+            marginLeft: theme.spacing(2),
             marginRight: theme.spacing(2)
        },
       fabParent: {

@@ -1,40 +1,41 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 import classNames from 'classnames';
 
 import {AppBar, Fab, Toolbar, Typography} from '@material-ui/core';
-import MUIIcon from '../icon/MUIIcon';
+import {MUIIcon} from '../icon/MUIIcon';
 import {MARGINAUTO, MARGINRIGHT} from '../../constants';
 
-const Footer = ({classes, setIsDrawerOpen, setIsFormOpen, setIsLfOpen}) => (
+export const Footer = ({classes, setIsDrawerOpen}) => (
     <AppBar position='static'>
         <Toolbar className={classes.spaceBetween}>
             <div className={classNames(classes.paperFlexFull, classes.fabParent)}>
+                <Link to={'/'}>
+                    <Fab color='primary' aria-label='home' size='small'
+                         title='На главную'>
+                        <MUIIcon icon={'Home'}/>
+                    </Fab>
+                </Link>
                 <Fab color='primary' aria-label='playlist content' size='small'
                      onClick={() => setIsDrawerOpen(true)}
-                            title='Просмотр содержимого плейлиста (список)'>
+                     title='Просмотр содержимого плейлиста (список)'>
                     <MUIIcon icon={'List'}/>
                 </Fab>
-                <Fab color='primary' aria-label='add playlist' size='small' style={MARGINRIGHT}
-                     onClick={() => setIsFormOpen(true)}
-                            title='Добавление нового плейлиста (на основе Json)'>
-                    <MUIIcon icon={'PlaylistAdd'}/>
-                </Fab>
-                <Fab color='primary' aria-label='add playlist' size='small' style={MARGINRIGHT}
-                     onClick={() => setIsLfOpen(true)}
-                            title='Изменение локальных плейлистов'>
-                    <MUIIcon icon={'ListAlt'}/>
-                </Fab>
-                <Typography style={MARGINAUTO} variant={'body2'}>2019</Typography>
+                <Link to={'/playlists'}>
+                    <Fab color='primary' aria-label='add playlist' size='small' style={MARGINRIGHT}
+                         title='Редактирование списков плейлистов'>
+                        <MUIIcon icon={'PlaylistAdd'}/>
+                    </Fab>
+                </Link>
+
             </div>
-        </Toolbar>
+            <Typography style={MARGINAUTO} variant={'body2'}>2019</Typography>
+            <Link to={'/about'}>
+                <Fab color='primary' aria-label='add playlist' size='small' style={MARGINRIGHT}
+                     title='О программе'>
+                    <MUIIcon icon={'Help'}/>
+                </Fab>
+            </Link>
+    </Toolbar>
     </AppBar>
 );
-
-Footer.propTypes = {
-    classes: PropTypes.object.isRequired,
-    setIsDrawerOpen: PropTypes.func.isRequired,
-    setIsFormOpen: PropTypes.func.isRequired
-};
-
-export default Footer;

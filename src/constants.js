@@ -1,15 +1,17 @@
 const url = window.location.origin;
 export const APP_ROOT = ((url.match(/github\.io/gi)) ? '/playlist/' : '');
 
-export const PLAYLIST_TYPE = {DEFAULT: 'DEFAULT', JSON: 'JSON', LF: 'LF'};
+export const PLAYLIST_TYPE = {DEFAULT: 'Default', JSON: 'JSON', LF: 'IndexedDB'};
 
 export const PLAYLISTS = [
     {
+        'key': 'id-1',
         'title': 'Santiano',
         'href': APP_ROOT + 'data/playlistSantiano.json',
         'type': PLAYLIST_TYPE.DEFAULT,
     },
     {
+        'key': 'id-2',
         'title': 'Zaz',
         'href': APP_ROOT + 'data/playlistZaz.json',
         'type': PLAYLIST_TYPE.DEFAULT,
@@ -44,3 +46,8 @@ export const PLAYER_STEPS_ICONS = ['SelectList', 'On', 'Play'];
 export const LFSTORE = 'playlists';
 
 export const LIST_KEY = 'list';
+
+export const ALERT_TYPES = {
+    LF: 'LF',
+    LS: 'LS'
+};

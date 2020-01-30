@@ -1,13 +1,13 @@
 import React from 'react';
-import * as PropTypes from 'prop-types';
 import {
     Home, Settings, Info, MoreVert as More, HelpOutline as Help, Menu,
     MusicNote as MusicOn, MusicOff, QueueMusic as List, Close, PlaylistPlay, PlaylistAdd, Pets,
-    MenuOpen as SelectList, Delete, Edit, PlayArrow, Done, Storage, ListAlt
+    MenuOpen as SelectList, Delete, Edit, PlayArrow, Done, Storage, ListAlt,
+    FormatIndentIncrease as ToJson, FormatIndentDecrease as FromJson
 } from '@material-ui/icons';
 
 
-const MUIIcon = ({icon = '', iconSize = 'small', color = 'inherit'}) => {
+export const MUIIcon = ({icon = '', iconSize = 'small', color = 'inherit'}) => {
     switch (icon) {
         case 'Menu':
             return <Menu fontSize={iconSize} color={color}/>;
@@ -49,15 +49,11 @@ const MUIIcon = ({icon = '', iconSize = 'small', color = 'inherit'}) => {
             return <Storage fontSize={iconSize} color={color}/>;
         case 'ListAlt':
             return <ListAlt fontSize={iconSize} color={color}/>;
+        case 'FromJson':
+            return <FromJson fontSize={iconSize} color={color}/>;
+        case 'ToJson':
+            return <ToJson fontSize={iconSize} color={color}/>;
         default:
     }
     return null;
 };
-
-MUIIcon.propTypes = {
-    icon: PropTypes.string,
-    iconSize: PropTypes.string,
-    color: PropTypes.string
-};
-
-export default MUIIcon;
