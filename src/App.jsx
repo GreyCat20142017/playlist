@@ -1,38 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {Route, Switch, withRouter} from 'react-router-dom';
-
-import {ThemeProvider} from '@material-ui/styles';
 import {Container, CssBaseline, Paper, Typography} from '@material-ui/core';
+import {ThemeProvider} from '@material-ui/styles';
+
 import {
-    About,
     Aside,
-    Comment,
     Footer,
     Header,
     Player,
-    PlayerStepper,
     PlayListContainer,
-    PlaylistDialog,
     Submenu
 } from './components/components';
+
 import LastPageContext from './LastPageContext';
-import {getActiveStep, getLocalPlaylists, getPlaylists} from './functions';
+import {getLocalPlaylists, getPlaylists} from './functions';
 import {useDB} from './hooks/customHooks';
 import {theme} from './theme';
 import {useStyles} from './App.css.js';
-
-const AppMain = ({content, playerActive, setPlayerActive, playlist, setPlaylist, changePlaylist, setIsStepperSubmenu}) => (
-    <>
-        <Player data={content} playerActive={playerActive}/>
-        {playlist && playerActive ?
-            <Comment setPlayerActive={setPlayerActive}/> :
-            <PlayerStepper activeStep={getActiveStep(playlist, playerActive)}
-                           playlist={playlist} setPlaylist={setPlaylist} changePlaylist={changePlaylist}
-                           playerActive={playerActive} setPlayerActive={setPlayerActive}
-                           showSubmenu={setIsStepperSubmenu}/>
-        }
-    </>
-);
+import {ROUTES} from './routes';
+import {About, Main, NotFound, PlaylistDialog} from './pages/pages';
 
 const App = ({history}) => {
     const [lists, setLists] = useState([]);
@@ -63,6 +49,7 @@ const App = ({history}) => {
     const mainProps = {
         content, playerActive, setPlayerActive, playlist, setPlaylist, changePlaylist, setIsStepperSubmenu
     };
+
     return (
 
         <ThemeProvider theme={theme}>
@@ -79,13 +66,15 @@ const App = ({history}) => {
                                            setContent={setContent}/>
                         <Aside classes={classes} isDrawerOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}
                                playlist={playlist} data={content} playerActive={playerActive}/>
-
+                        <Player data={content} playerActive={playerActive}/>
                         <Switch>
-                            <Route path='/' exact render={() => <AppMain {...mainProps}/>}/>
-                            <Route path='/playlists'
+                            <Route path={ROUTES.MAIN} exact
+                                   render={() => <Main {...mainProps}/>}/>
+                            <Route path={ROUTES.EDIT}
                                    render={() => <PlaylistDialog lists={lists} setLists={setLists}/>}/>
-                            <Route path='/about' render={() => <About/>}/>
-                            <Route render={() => <p>404. Страница не найдена</p>}/>
+                            <Route path={ROUTES.ABOUT}
+                                   render={() => <About/>}/>
+                            <Route render={() => <NotFound/>}/>
                         </Switch>
 
                         <Submenu submenuItems={getPlaylists(lists)} withNavLink={false} callback={changePlaylist}

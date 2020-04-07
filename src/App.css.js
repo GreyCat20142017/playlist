@@ -83,7 +83,11 @@ export const useStyles = makeStyles({
         },
        ml: {
             marginLeft: theme.spacing(2),
-            marginRight: theme.spacing(2)
+            marginRight: theme.spacing(2),
+           [theme.breakpoints.down('sm')]: {
+              fontSize: '100%',
+               wordBreak: 'break-word'
+           }
        },
       fabParent: {
           '& > *': {

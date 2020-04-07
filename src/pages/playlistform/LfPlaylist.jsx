@@ -4,7 +4,7 @@ import {Add} from '@material-ui/icons';
 import {localforage as lf} from '../../localforage';
 
 import LfForm from './LfForm';
-import {MUIIcon, MUITable} from '../components';
+import {MUIIcon, MUITable} from '../../components/components';
 import {JsonViewer} from './JsonViewer';
 import {LIST_KEY, PLAYLIST_TYPE} from '../../constants';
 import {getTableActions, isValidIndex} from '../../functions';
@@ -103,7 +103,8 @@ export const LfPlaylist = ({lists, setLists, edited, setEdited}) => {
     return (
         <>
             {showJson && <JsonViewer content={content} setShowJson={setShowJson} title={title}/>}
-            {importJson && <JsonImport content={content} setContent={setContent} setImportJson={setImportJson} title={title}/>}
+            {importJson &&
+            <JsonImport content={content} setContent={setContent} setImportJson={setImportJson} title={title}/>}
 
             {(!showJson && !importJson) &&
             <>
@@ -123,7 +124,7 @@ export const LfPlaylist = ({lists, setLists, edited, setEdited}) => {
 
                 {track && <LfForm track={track} setTrack={setTrack} onSaveTrack={onSaveTrack}/>}
 
-                <ButtonGroup style={{marginTop: '10px'}}>
+                <ButtonGroup style={{marginTop: '10px', flexWrap: 'wrap', justifyContent: 'center'}}>
                     <Button onClick={onCancel} title='вернуться к списку без сохранения текущего плейлиста'>
                         назад к списку плейлистов
                     </Button>

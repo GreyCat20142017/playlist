@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Button, ButtonGroup, Typography} from '@material-ui/core';
 import {getClearData, getFilteredData} from '../../functions';
-import {MUIIcon} from '../icon/MUIIcon';
-import {MUITable} from '../components';
+import {MUIIcon} from '../../components/icon/MUIIcon';
+import {MUITable} from '../../components/components';
 import {useStyles} from './playlistform.css';
 
 const reader = new FileReader();

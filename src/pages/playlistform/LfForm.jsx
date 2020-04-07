@@ -41,7 +41,8 @@ const LfForm = ({track = null, setTrack, onSaveTrack}) => {
                 Ссылку нужного формата можно получить через функцию ПОДЕЛИТЬСЯ на youtube
             </Typography>
 
-            <ButtonGroup className={classes.buttonGroup}>                <Button type='submit' color='secondary' variant='contained'  title='сохранить и закрыть'>
+            <ButtonGroup className={classes.buttonGroup}>
+                <Button type='submit' color='secondary' variant='contained'  title='сохранить и закрыть'>
                     сохранить
                 </Button>
                 <Button color='secondary' variant='contained'  title=' закрыть'

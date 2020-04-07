@@ -5,9 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
+import {APP_ROOT} from './constants';
 
 ReactDOM.render(
-    <BrowserRouter>
+    <BrowserRouter basename={APP_ROOT}>
         <App/>
     </BrowserRouter>, document.getElementById('root'));
 

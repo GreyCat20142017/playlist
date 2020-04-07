@@ -100,6 +100,7 @@ export const MUITable = ({
                         </TableBody>
                     </Table>
 
+                    {data && (data.length > 5) &&
                     <TablePagination className={classes.selectRoot} size={'small'}
                                      rowsPerPageOptions={[5, 10, 15]}
                                      labelRowsPerPage={''}
@@ -109,6 +110,7 @@ export const MUITable = ({
                                      page={page}
                                      onChangePage={handleChangePage}
                                      onChangeRowsPerPage={handleChangeRowsPerPage}/>
+                    }
                 </div>
             </Paper>
         </div>

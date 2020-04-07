@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+
 import {getClearData, getFilteredData} from '../../functions';
 import {PLAYLIST_TYPE} from '../../constants';
 import {localforage as lf} from '../../localforage';
 
 export const PlayListContainer = ({playlist, setContent}) => {
     const [error, setError] = useState(null);
-
 
     useEffect(() => {
         const getData = async (playlist) => {

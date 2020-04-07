@@ -13,11 +13,11 @@ const ActionsCells = ({actions, rowInd, disabledCondition = false, disabledActio
         Object.keys(actions).map(key => (
             <TableCell size={'small'} key={rowInd + '-' + key} title={actions[key]['title']} style={{width: '20px'}}>
                 {(disabledCondition && (disabledActions.indexOf(key.toLowerCase()) !== -1)) ?
-                <Button disabled={true}>
+                <Button disabled={true} title={actions[key]['title']}>
                     <MUIIcon icon={actions[key]['icon']} color={'disabled'}/>
                 </Button>
                 :
-                <Button onClick={() => onButtonClick(actions, key, rowInd)}>
+                <Button  title={actions[key]['title']} onClick={() => onButtonClick(actions, key, rowInd)}>
                     {actions[key]['icon'] ?
                         <MUIIcon icon={actions[key]['icon']}/> :
                         actions[key]['title'] || ''

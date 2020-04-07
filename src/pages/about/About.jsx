@@ -1,17 +1,22 @@
 import React, {useState} from 'react';
 import {Redirect} from 'react-router-dom';
-import {Button, Divider, Grid, Paper, Typography} from '@material-ui/core';
+import {Button, Divider, Drawer, Grid, Paper, Typography} from '@material-ui/core';
+
+import {ROUTES} from '../../routes';
 import {useStyles} from './About.css';
 
 export const About = () => {
-    const [needRedirect, setNeedRedirect] = useState(false);
+    const [redirect, setRedirect] = useState(null);
     const classes = useStyles();
 
-    const redirect = () => setNeedRedirect(true);
+    const onClose = () => setRedirect(ROUTES.MAIN);
+
+    if (redirect) {
+        return <Redirect to={redirect}/>
+    }
 
     return (
-        needRedirect ?
-            <Redirect to={'/'}/> :
+        <Drawer className={classes.drawer} open={true} anchor={'right'} onClose={onClose}>
             <Paper className={classes.paper}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -65,13 +70,14 @@ export const About = () => {
                 </Grid>
 
                 <Typography variant={'caption'} style={{margin: '20px 0'}}>
-                    Редактирование и сохранение списков не работает в режиме inPrivate.
+                    Редактирование и сохранение списков не имеет смысла в режиме inPrivate.
                     Отдельное спасибо обитателям одного чатика, которые наводящими вопросами помогли понять это:-)
                 </Typography>
 
-                <Button onClick={redirect} color={'primary'} variant={'outlined'} title={'Перейти на главную'}>
+                <Button onClick={onClose} color={'primary'} variant={'outlined'} title={'Перейти на главную'}>
                     на главную
                 </Button>
             </Paper>
+        </Drawer>
     );
 };
