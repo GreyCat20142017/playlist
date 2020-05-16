@@ -3,7 +3,8 @@ import {
     Home, Settings, Info, MoreVert as More, HelpOutline as Help, Menu,
     MusicNote as MusicOn, MusicOff, QueueMusic as List, Close, PlaylistPlay, PlaylistAdd, Pets,
     MenuOpen as SelectList, Delete, Edit, PlayArrow, Done, Storage, ListAlt,
-    FormatIndentIncrease as ToJson, FormatIndentDecrease as FromJson
+    FormatIndentIncrease as ToJson, FormatIndentDecrease as FromJson,
+    ArrowUpward as Up, ArrowDownward as Down
 } from '@material-ui/icons';
 
 
@@ -53,6 +54,10 @@ export const MUIIcon = ({icon = '', iconSize = 'small', color = 'inherit'}) => {
             return <FromJson fontSize={iconSize} color={color}/>;
         case 'ToJson':
             return <ToJson fontSize={iconSize} color={color}/>;
+        case 'Up':
+            return <Up fontSize={iconSize} color={color}/>;
+        case 'Down':
+            return <Down fontSize={iconSize} color={color}/>;
         default:
     }
     return null;

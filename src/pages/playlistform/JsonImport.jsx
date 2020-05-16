@@ -17,6 +17,7 @@ export const JsonImport = ({content, setContent, setImportJson, title}) => {
     useEffect(() => {
         const onLoad = () => {
             const fileContent = JSON.parse(reader.result);
+            console.log('2.fileContent', fileContent, getClearData(getFilteredData(fileContent)));
             setJsonContent(fileContent ? getClearData(getFilteredData(fileContent)) : []);
         };
         reader.addEventListener('load', onLoad);
@@ -32,6 +33,7 @@ export const JsonImport = ({content, setContent, setImportJson, title}) => {
     const showJsonContent = () => {
         const curFiles = ref.current.files;
         if ((reader && curFiles && curFiles.length > 0) && (curFiles[0].type === 'application/json')) {
+            console.log('1');
             const file = curFiles[0];
             setStatus(file.name);
             reader.readAsText(file, 'UTF-8');
@@ -50,6 +52,8 @@ export const JsonImport = ({content, setContent, setImportJson, title}) => {
         setContent([...jsonContent]);
         setImportJson(false);
     };
+
+    console.log('jsonContent', jsonContent);
 
     return (
         <div className={classes.wrapper}>

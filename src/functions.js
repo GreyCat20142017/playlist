@@ -51,9 +51,10 @@ export const getClearData = (data) => data.map(el => {
     return el;
 });
 
+
 export const getFilteredData = (data) => (
     Array.isArray(data) ? data.filter(item => (item['title'] && item['link']
-        && isValidUrl(item['link']) && isYoutubeUrl(item['link']))) : []
+        && (isMaybeYoutubeId(item['link']) || (isValidUrl(item['link']) && isYoutubeUrl(item['link']))))) : []
 );
 
 export const getLocalPlaylists = () => {
@@ -81,7 +82,7 @@ export const isValidUrl = (url) => {
     return pattern.test(url);
 };
 
-export const getTableActions = (onDelete = null, onEdit = null, onExport = null) => {
+export const getTableActions = (onDelete = null, onEdit = null, onExport = null, onUp = null, onDown = null) => {
     const actions = {};
     if (onDelete) {
         actions['delete'] = {'title': 'удалить', icon: 'Delete', onCallback: onDelete};
@@ -92,8 +93,15 @@ export const getTableActions = (onDelete = null, onEdit = null, onExport = null)
     if (onExport) {
         actions['export'] = {'title': 'экспорт в IndexedDB', icon: 'Storage', onCallback: onExport};
     }
+    if (onUp) {
+        actions['up'] = {'title': 'Переместить вверк', icon: 'Up', onCallback: onUp};
+    }
+    if (onDown) {
+        actions['down'] = {'title': 'Переместить вниз', icon: 'Down', onCallback: onDown};
+    }
     return actions;
 };
+
 
 export const isData = (data) => (data && Array.isArray(data) && data.length > 0);
 
@@ -104,3 +112,29 @@ export const getActiveStep = (playlist, playerActive) => (
 );
 
 export const getNewKey = () => ('id-' + (+new Date()));
+
+export const moveDown = (sourceArr, ind) => {
+    if (sourceArr.length <= 1) {
+        return sourceArr;
+    }
+    const arr = [...sourceArr];
+    if (ind !== arr.length - 1) {
+        [arr[ind], arr[ind + 1]] = [arr[ind + 1], arr[ind]];
+        return arr;
+    }
+    const moved = arr.pop();
+    return [moved, ...arr];
+};
+
+export const moveUp = (sourceArr, ind) => {
+    if (sourceArr.length <= 1) {
+        return sourceArr;
+    }
+    const arr = [...sourceArr];
+    if (ind !== 0) {
+        [arr[ind], arr[ind - 1]] = [arr[ind - 1], arr[ind]];
+        return arr;
+    }
+    const moved = arr.shift();
+    return [...arr, moved];
+};

@@ -7,7 +7,7 @@ import LfForm from './LfForm';
 import {MUIIcon, MUITable} from '../../components/components';
 import {JsonViewer} from './JsonViewer';
 import {LIST_KEY, PLAYLIST_TYPE} from '../../constants';
-import {getTableActions, isValidIndex} from '../../functions';
+import {getTableActions, isValidIndex, moveDown, moveUp} from '../../functions';
 import {useDB} from '../../hooks/customHooks';
 import {JsonImport} from './JsonImport';
 
@@ -100,6 +100,14 @@ export const LfPlaylist = ({lists, setLists, edited, setEdited}) => {
         setImportJson(true);
     };
 
+    const onUp = (ind) => {
+        setContent(moveUp(content, ind));
+    };
+
+    const onDown = (ind) => {
+        setContent(moveDown(content, ind));
+    };
+
     return (
         <>
             {showJson && <JsonViewer content={content} setShowJson={setShowJson} title={title}/>}
@@ -120,7 +128,7 @@ export const LfPlaylist = ({lists, setLists, edited, setEdited}) => {
                 </IconButton>
                 <MUITable data={content} size={'small'} TracksLimit={5} columns={['title', 'link']}
                           tableTitle={'Содержимое плейлиста "' + title + '"'}
-                          hoverField={'title'} actions={getTableActions(onDeleteTrack, onEditTrack)}/>
+                          hoverField={'title'} actions={getTableActions(onDeleteTrack, onEditTrack, null, onUp, onDown)}/>
 
                 {track && <LfForm track={track} setTrack={setTrack} onSaveTrack={onSaveTrack}/>}
 
